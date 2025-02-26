@@ -1,0 +1,2320 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>ScriptableObject Pro</title>
+
+	<link href="SoPro_files/css.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="SoPro_files/prettify.css">
+	<script src="SoPro_files/jquery.min.txt"></script>
+	<link rel="stylesheet" href="SoPro_files/style.css">
+	<link rel="stylesheet" href="SoPro_files/gif.css">
+	<script type="text/javascript" src="SoPro_files/site.txt"></script>
+	<script type="text/javascript" src="SoPro_files/gif.txt" defer="defer"></script>
+</head>
+<body onload="PR.prettyPrint()">
+	<header class="header">
+		<span class="center">ScriptableObject Pro Version V.1.0.4</span>
+	</header>
+	<div class="navigation">
+		<nav>
+			<ul>
+<li><a href="#sectionA"><span class="label">Introduction</span></a>
+</li>
+<li><a href="#sectionB"><span class="label">Quick Start</span></a>
+</li>
+<li><a href="#sectionC"><span class="label">ScriptableObject</span></a>
+
+<ul>
+<li><a href="#sectionCA"><span class="label">Overview</span></a>
+</li>
+<li><a href="#sectionCB"><span class="label">Constructors</span></a>
+</li>
+<li><a href="#sectionCC"><span class="label">Fields</span></a>
+</li>
+<li><a href="#sectionCD"><span class="label">Properties</span></a>
+
+<ul>
+<li><a href="#sectionCDA"><span class="label">Path</span></a>
+</li>
+</ul></li>
+<li><a href="#sectionCE"><span class="label">Methods</span></a>
+
+<ul>
+<li><a href="#sectionCEA"><span class="label">AutoSaveOff</span></a>
+</li>
+<li><a href="#sectionCEB"><span class="label">AutoSaveOn</span></a>
+</li>
+<li><a href="#sectionCEC"><span class="label">OnEnable</span></a>
+</li>
+<li><a href="#sectionCED"><span class="label">Reset</span></a>
+</li>
+<li><a href="#sectionCEE"><span class="label">Save</span></a>
+</li>
+<li><a href="#sectionCEF"><span class="label">ToJson</span></a>
+</li>
+<li><a href="#sectionCEG"><span class="label">FromJson</span></a>
+</li>
+<li><a href="#sectionCEH"><span class="label">CreateInstance</span></a>
+</li>
+</ul></li>
+<li><a href="#sectionCF"><span class="label">Attributes</span></a>
+
+<ul>
+<li><a href="#sectionCFA"><span class="label">Immutable</span></a>
+</li>
+<li><a href="#sectionCFB"><span class="label">Mutable</span></a>
+</li>
+<li><a href="#sectionCFC"><span class="label">PersistAcrossBuilds</span></a>
+</li>
+<li><a href="#sectionCFD"><span class="label">ResetOnError</span></a>
+</li>
+<li><a href="#sectionCFE"><span class="label">QuitOnError</span></a>
+</li>
+<li><a href="#sectionCFF"><span class="label">Trace</span></a>
+</li>
+<li><a href="#sectionCFG"><span class="label">NoTrace</span></a>
+</li>
+</ul></li>
+<li><a href="#sectionCG"><span class="label">Exceptions</span></a>
+</li>
+</ul></li>
+<li><a href="#sectionD"><span class="label">Testing</span></a>
+
+<ul>
+<li><a href="#sectionDA"><span class="label">Manage Data Files</span></a>
+</li>
+<li><a href="#sectionDB"><span class="label">Enable in Play Mode</span></a>
+</li>
+<li><a href="#sectionDC"><span class="label">Disable in Play Mode</span></a>
+</li>
+<li><a href="#sectionDD"><span class="label">Enable Debug</span></a>
+</li>
+<li><a href="#sectionDE"><span class="label">Disable Debug</span></a>
+</li>
+</ul></li>
+<li><a href="#sectionE"><span class="label">Example Code</span></a>
+
+<ul>
+<li><a href="#sectionEA"><span class="label">Mutable Class</span></a>
+</li>
+<li><a href="#sectionEB"><span class="label">Mutable Fields</span></a>
+</li>
+<li><a href="#sectionEC"><span class="label">Immutable Fields</span></a>
+</li>
+<li><a href="#sectionED"><span class="label">User defined Save</span></a>
+</li>
+<li><a href="#sectionEE"><span class="label">AutoSave</span></a>
+</li>
+<li><a href="#sectionEF"><span class="label">Persist Unity Objects</span></a>
+</li>
+</ul></li>
+<li><a href="#sectionF"><span class="label">Supported Datatypes</span></a>
+
+<ul>
+<li><a href="#sectionFA"><span class="label">C# Data types</span></a>
+</li>
+<li><a href="#sectionFB"><span class="label">Unity Data types</span></a>
+</li>
+<li><a href="#sectionFC"><span class="label">Unity Objects</span></a>
+</li>
+</ul></li>
+<li><a href="#sectionG"><span class="label">Additional Information</span></a>
+
+<ul>
+<li><a href="#sectionGA"><span class="label">Support</span></a>
+</li>
+<li><a href="#sectionGB"><span class="label">Change Requests</span></a>
+</li>
+</ul></li>
+			</ul>
+			<br><br><br>
+		</nav>
+	</div>
+	<div class="navigation2">
+		<nav>
+			<ul>
+			</ul>
+			<br><br><br>
+		</nav>
+	</div>
+	<div class="fsm" id="mainContent"><div id="fsm_actual" style="position: absolute;"></div></div>
+
+<div class="content" id="sectionA" style="">
+	<h2>Introduction</h2>
+	<section>
+		<p>
+			ScriptableObject Pro is a utility that enables the saving and loading of Unity ScriptableObjects at runtime.
+<br>
+This means that changes to the ScriptableObject data will be persisted 
+across runs thus enabling a save/load scenario whilst using Unity 
+Scriptable Object technology. ScriptableObject Pro allso enables the 
+creation and persistence of ScriptableObject assets at runtime.
+<br>
+
+<br>
+Please refer to the section <a href="#sectionB">Quick Start</a> to see the steps necessary to quickly upgrade a Unity ScriptableObject to ScriptableObject Pro
+<br>
+
+<br>
+This version of the utility was written in C# with Unity .Net 4.7.1 
+libraries and tested using Unity 2020.3 and 2021.3  for Standalone, 
+WebGL, Andriod and IOS but should function on all platforms supported by
+ Unity.
+<br>
+Whilst every effort has been made to ensure the compatibility of 
+ScriptableObject Pro with all Unity versions, the correct functioning of
+ the software with Unity Alpha, Beta or Technical releases cannot be 
+guaranteed.
+<br>
+
+<br>
+Please refer to the section <a href="#sectionGB">Change Requests</a> should you have a serializable field which ScriptableObject Pro cannot handle.
+<br>
+
+<br>
+The code that makes up this utility is copyright SteveSmith.SoftWare 
+2022. Unless specifically stated in the code file or this documentation,
+ no part of the system may be copied or modified. Neither may it be 
+stored in such a way that would make it available to the public outside 
+of the Unity Asset Store.
+<br>
+
+<br>
+This documentation is available online at https://stevesmith.software. 
+You will also find there the form for filing a bug report should it be 
+necessary.
+<br>
+
+<br>
+Steve Smith 2022.
+<br>
+
+<br>
+ScriptableObject Pro Version 1.0.4 June 2023<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionB">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="content" id="sectionB" style="display: none;">
+	<h2>Quick Start</h2>
+	<section>
+		<p>
+			<b>Unity Scriptable Object</b>
+<br>
+
+<br>
+</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pln"> </span><span class="pun">(</span><span class="pln">fileName</span><span class="pun">=</span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName</span><span class="pun">=</span><span class="str">"My SO "</span><span class="pun">)]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pun">[]</span><span class="pln"> waypoints</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pln"> currPosition</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> nextWayPoint </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">float</span><span class="pln"> currLerp </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0f</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Material</span><span class="pln"> currMat</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+<b>ScriptableObject Pro</b>
+<br>
+
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pun">(</span><span class="pln">fileName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"My SO"</span><span class="pun">)]</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">Attributes</span><span class="pun">.</span><span class="typ">Mutable</span><span class="pun">]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pun">[]</span><span class="pln"> waypoints</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pln"> currPosition</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> nextWayPoint </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">float</span><span class="pln"> currLerp</span><span class="pun">=</span><span class="lit">0.0f</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Material</span><span class="pln"> currMat</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+
+<br>
+1) Change - The inheritance of the class
+<br>
+<b>public class MySO : ScriptableObject</b>
+<br>
+becomes
+<br>
+<b>public class MySO : SSSoftware.SOPro.ScriptableObject</b>
+<br>
+This switches the class from UnityEngine.ScriptableObject to SOPro.ScriptableObject
+<br>
+
+<br>
+Note: Applying this change to an existing Unity ScriptableObject will NOT lead to the loss of any data.
+<br>
+
+<br>
+2) Add - <b>[SSSoftware.Attributes.Mutable]</b> - Above the class definiton. This makes all public, serializable fields in the class mutable.
+<br>
+
+<br>
+3) If your ScriptableObject implements the OnEnable method it MUST call the ScriptableObject Pro OnEnable as it's FIRST action
+<br>
+
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	</span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnEnable</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		</span><span class="com">// Your code here</span><span class="pln">
+	</span><span class="pun">}</span></code></pre>
+	Before
+<br>
+<p></p>
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	</span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnEnable</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		</span><span class="kwd">base</span><span class="pun">.</span><span class="typ">OnEnable</span><span class="pun">();</span><span class="pln">
+
+		</span><span class="com">// Your code here</span><span class="pln">
+	</span><span class="pun">}</span></code></pre>
+	After
+<br>
+Note: The new keyword is also added to the method signature to surpress the compiler warning
+<br>
+<p></p>
+<br>
+
+<br>
+NOTE: This is the minimum required to upgrade from a Unity ScriptableObject to ScriptableObject Pro.
+<br>
+Your usage of mutable ScriptableObjects can be made more efficient by following the complete documentation.
+<br>
+<p></p>
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionA">&lt;- Previous</a>
+	<a href="#sectionC">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="content" id="sectionC" style="display: none;">
+	<h2>ScriptableObject</h2>
+	<section>
+		<p>
+			The class from which all ScriptableObject Pro classes should inherit.
+<br>
+
+<br>
+Namspace <b>SSSoftware.SOPro</b>
+<br>
+
+<br>
+Class <b>public class ScriptableObject</b>
+		</p>
+<div class="subcontent" id="sectionCA" style="display: none;">
+	<span class="label1">Overview</span>
+	<section>
+		<p>
+			All ScriptableObject Pro objects must implement 2 things
+<br>
+
+<br>
+1)  Inherit from <b>SSSoftware.SOPro.ScriptableObject</b>
+<br>
+2) Apply the <b>[SSSoftware.Attributes.Mutable]</b> attribute. See <a href="#sectionCF">Attributes</a> for more information on SOPro Attribute usage.
+<br>
+
+<br>
+This will enable the default save behaviour of ScriptableObject Pro. Refer to <a href="#sectionCEA">AutoSaveOff</a> and <a href="#sectionCEB">AutoSaveOn</a> for more information.
+<br>
+
+<br>
+At runtime ScriptableObject Pro creates a save file in  the Application.persistentDataPath folder for your target platform.
+<br>
+Note: To Reset the ScriptableObject to it's original build values this file may be deleted.
+<br>
+
+<br>
+ScriptableObject Pro uses a custom, copyrighted file format. Any attempt
+ to modiy a ScriptableObject Pro file outside of this utility will 
+render it inoperable.
+<br>
+
+<br>
+The ScriptableObject Pro Anti-Cheat system offers 2 methods of automatically dealing with tampered files <a href="#sectionCFD">ResetOnError</a> and <a href="#sectionCFE">QuitOnError</a>
+ if you do not use these then your application should cater for the fact
+ that should the save file have been tampered with an Exception will be 
+thrown.
+<br>
+Refer to <a href="#sectionCG">Exceptions</a> and <a href="#sectionCEC">OnEnable</a> for more details.<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionC">&lt;- Previous</a>
+	<a href="#sectionCB">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCB" style="display: none;">
+	<span class="label1">Constructors</span>
+	<section>
+		<p>
+			As with Unity ScriptableObjects ScriptableObject Pro classes can NOT be constructed using the <b>new</b> keyword.
+<br>
+
+<br>
+Unitys [CreateAssetMenu] attribute may be applied to the derived class for asset creation.
+<br>
+
+<br>
+For creation of ScriptableObject assets using Unity Editor code please 
+refer to Unity ScriptableObject.CreateInstance documentation.
+<br>
+
+<br>
+Note: ScriptableObjects cannot be created at runtime.<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCA">&lt;- Previous</a>
+	<a href="#sectionCC">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCC" style="display: none;">
+	<span class="label1">Fields</span>
+	<section>
+		<p>
+			All of the public serializable fields of your ScriptableObject are 
+exposed in the Unity Editor and UnityEngine exactly as a Unity 
+ScriptableObject would be.
+<br>
+
+<br>
+private or non serrializable fileds are accesible through code.
+<br>
+
+<br>
+ScriptableObject Pro enables the serialization and mutability of several
+ data types that Unity ScriptableObjects do not. Please refer to <a href="#sectionFA">C# Data types</a> and <a href="#sectionFB">Unity Data types</a> for more information.
+<br>
+
+<br>
+In addition to this there are 2  fields unique to ScriptableObject Pro
+<br>
+
+<br>
+<b>int id</b> A unique identifier for this ScriptableObject asset
+<br>
+<b>long dateUpdated</b> The date/Time the Scriptable object was last created/updated
+<br>
+
+<br>
+These fields are not visible in the Unity Editor Inspector, they are 
+assigned automatically by the utility and must NOT be changed by your 
+code.<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCB">&lt;- Previous</a>
+	<a href="#sectionCD">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCD" style="display: none;">
+	<span class="label1">Properties</span>
+	<section>
+		<p>
+			These additional properties are defined by ScriptableObject Pro
+<br>
+
+<br>
+<a href="#sectionCDA">Path</a>
+		</p>
+<div class="subcontent" id="sectionCDA" style="display: none;">
+	<span class="label1">Path</span>
+	<section>
+		<p>
+			string Path
+<br>
+
+<br>
+This property returns the full path and file name of the underlying save file for the ScriptableObject
+<br>
+
+<br>
+Example Usage
+<br>
+
+<br>
+</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	</span><span class="typ">File</span><span class="pun">.</span><span class="typ">Delete</span><span class="pun">(</span><span class="typ">MySoPro</span><span class="pun">.</span><span class="typ">Path</span><span class="pun">);</span></code></pre>
+
+<br>
+	This will delete the underlying save file and reset the ScriptableObject to it's build values on next application run.
+<br>
+<p></p>
+<br>
+
+<br>
+
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCD">&lt;- Previous</a>
+	<a href="#sectionCE">Next -&gt;</a>
+	</p><br><br>
+</div>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCC">&lt;- Previous</a>
+	<a href="#sectionCDA">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCE" style="display: none;">
+	<span class="label1">Methods</span>
+	<section>
+		<p>
+			The following are the public methods which can be called by user code
+ to control the functioning of ScriptableObject Pro. Other, 
+undocumented, public methods are for internal use only and should NOT be
+ called by user code.<br>
+		</p>
+<div class="subcontent" id="sectionCEA" style="display: none;">
+	<span class="label1">AutoSaveOff</span>
+	<section>
+		<p>
+			</p><table>
+                <tbody><tr><td><br></td></tr>
+                <tr>
+                    <td>void</td>
+                    <td colspan="2"><b>AutoSaveOff</b>()</td>
+                </tr>
+                  <tr><td><br></td></tr>
+              <tr>
+                    <td></td>
+                    <td><i>Description</i></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="2">By default the state of a 
+ScriptableObject Pro class will be saved automatically when the 
+application quits or looses focus. A call to AutoSaveOff will disable 
+this behaviour and it is then the responsibility of user code to call <a href="#sectionCEE">Save</a> to save the state.</td>
+                </tr><tr><td><br></td></tr>
+                
+                <tr>
+                    <td></td>
+                    <td><i>Parameters</i></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>none</td>
+                    <td></td>
+                </tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td></td>
+                    <td><i>Return values</i></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>none</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td></td>
+                    <td><i>Example</i></td>
+                </tr>
+                <tr>
+                    <td></td>
+
+                    <td colspan="2">
+ <p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="typ">MySOPro</span><span class="pun">.</span><span class="typ">AutoSaveOff</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Disable the default save behaviour</span><span class="pln">
+
+</span><span class="typ">MySOPro</span><span class="pun">.</span><span class="typ">AutoSaveOff</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Cancel a previous timed Autosave</span></code></pre>
+<p></p>                   </td>
+                </tr>
+</tbody></table>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCE">&lt;- Previous</a>
+	<a href="#sectionCEB">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCEB" style="display: none;">
+	<span class="label1">AutoSaveOn</span>
+	<section>
+		<p>
+			</p><table>
+	<tbody><tr><td><br></td></tr>
+	<tr>
+		<td>void</td>
+		<td colspan="2"><b>AutoSaveOn</b>(float time)</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Description</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">This method activates the default saving of objects and, alternatively, adds a timed save</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Parameters</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>time</td>
+		<td>The time interval in seconds at which saves are to be performed. Optional when restoring default behaviour</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Return values</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>none</td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Example</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">
+			<p>
+				</p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	</span><span class="typ">MySOPro</span><span class="pun">.</span><span class="typ">AutoSaveOn</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Enable default save behaviour (On Exit or Lost Focus)</span><span class="pln">
+
+	</span><span class="typ">MySOPro</span><span class="pun">.</span><span class="typ">AutoSaveOn</span><span class="pun">(</span><span class="lit">0.5f</span><span class="pun">);</span><span class="pln"> </span><span class="com">// Autosave MySOPro every half second</span></code></pre>
+			<p></p>
+		</td>
+	</tr>
+</tbody></table>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCEA">&lt;- Previous</a>
+	<a href="#sectionCEC">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCEC" style="display: none;">
+	<span class="label1">OnEnable</span>
+	<section>
+		<p>
+			The OnEnable method is automatically called by Unity when your application starts.
+<br>
+
+<br>
+If you have implemented the OnEnable method in your ScriptableObject 
+then it MUST call the ScriptableObject Pro OnEnable as it's FIRST action
+<br>
+
+<br>
+</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	</span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnEnable</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		</span><span class="com">// Your code here</span><span class="pln">
+	</span><span class="pun">}</span></code></pre>
+	Before
+<br>
+<p></p>
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	</span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnEnable</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		</span><span class="kwd">base</span><span class="pun">.</span><span class="typ">OnEnable</span><span class="pun">();</span><span class="pln">
+
+		</span><span class="com">// Your code here</span><span class="pln">
+	</span><span class="pun">}</span></code></pre>
+	After
+<br>
+Note: The new keyword is also added to the method signature to surpress the compiler warning
+<br>
+<p></p>
+<br>
+This is also a good place to check if a ScriptableObject Pro file has been tampered with
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	</span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnEnable</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		</span><span class="kwd">try</span><span class="pln">
+		</span><span class="pun">{</span><span class="pln">
+			</span><span class="kwd">base</span><span class="pun">.</span><span class="typ">OnEnable</span><span class="pun">();</span><span class="pln">
+		</span><span class="pun">}</span><span class="pln">
+		</span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">System</span><span class="pun">.</span><span class="pln">IO</span><span class="pun">.</span><span class="typ">FileLoadException</span><span class="pun">)</span><span class="pln">
+		</span><span class="pun">{</span><span class="pln">
+			</span><span class="typ">Debug</span><span class="pun">.</span><span class="typ">Log</span><span class="pun">(</span><span class="str">"The ScriptableObject Pro file has been modified"</span><span class="pun">);</span><span class="pln">
+
+			</span><span class="com">// This is the same as the [QuitOnError] attribute</span><span class="pln">
+			</span><span class="typ">Application</span><span class="pun">.</span><span class="typ">Quit</span><span class="pun">();</span><span class="pln">
+
+			</span><span class="com">// OR</span><span class="pln">
+
+			</span><span class="com">// This is the same as the [ResetOnError] attribute</span><span class="pln">
+			</span><span class="com">// Delete the modified file which will reset the ScriptableObject to it's build state</span><span class="pln">
+			</span><span class="typ">System</span><span class="pun">.</span><span class="pln">IO</span><span class="pun">.</span><span class="typ">File</span><span class="pun">.</span><span class="typ">Delete</span><span class="pun">(</span><span class="typ">Path</span><span class="pun">);</span><span class="pln">
+
+			</span><span class="com">// Reload Original ScriptableObject</span><span class="pln">
+			</span><span class="kwd">base</span><span class="pun">.</span><span class="typ">OnEnable</span><span class="pun">();</span><span class="pln">
+		</span><span class="pun">}</span><span class="pln">
+
+		</span><span class="com">// Your code here</span><span class="pln">
+	</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+
+<br>
+
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCEB">&lt;- Previous</a>
+	<a href="#sectionCED">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCED" style="display: none;">
+	<span class="label1">Reset</span>
+	<section>
+		<p>
+			</p><table>
+	<tbody><tr><td><br></td></tr>
+	<tr>
+		<td>void</td>
+		<td colspan="2"><b>Reset</b>()</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Description</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">This method resets the ScriptableObject back to it's original build values<br>
+This means that when used in the Editor the savefile is leading whereas in a build the scriptable object is leading
+</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Parameters</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>none</td>
+		<td></td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Return values</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>none</td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Example</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">
+			<p>
+</p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	 </span><span class="typ">MySOPro</span><span class="pun">.</span><span class="typ">Reset</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Reset  the current state of MySOPro to it's build values</span></code></pre>
+			<p></p>
+		</td>
+	</tr>
+</tbody></table>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCEC">&lt;- Previous</a>
+	<a href="#sectionCEE">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCEE" style="display: none;">
+	<span class="label1">Save</span>
+	<section>
+		<p>
+			</p><table>
+	<tbody><tr><td><br></td></tr>
+	<tr>
+		<td>void</td>
+		<td colspan="2"><b>Save</b>()</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Description</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">This method will Save the current state of the ScriptableObject Pro class.<br>
+If AutoSaveOff has been used then this method MUST be called in order to save the state.
+</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Parameters</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>none</td>
+		<td></td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Return values</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>none</td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Example</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">
+			<p>
+</p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	 </span><span class="typ">MySOPro</span><span class="pun">.</span><span class="typ">Save</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Save the current state of MySOPro</span></code></pre>
+			<p></p>
+		</td>
+	</tr>
+</tbody></table>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCED">&lt;- Previous</a>
+	<a href="#sectionCEF">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCEF" style="display: none;">
+	<span class="label1">ToJson</span>
+	<section>
+		<p>
+			</p><table>
+	<tbody><tr><td><br></td></tr>
+	<tr>
+		<td>string</td>
+		<td colspan="2"><b>ToJson</b>(string file=null)</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Description</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">Converts a SOPro object to a Json string and writes the output to a file<br>
+This method will try to use Newtonsoft.Json if it is installed, if not it will fallback to the Unity JsonUtility
+</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Parameters</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>file</td>
+		<td>Optional path+filename to write. If omitted Application.persistentDataPath+SOPro name+.json will be used</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Return values</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>string</td>
+		<td>The path+filename used to write the Json data</td>
+		<td></td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Example</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">
+			<p>
+				</p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">TestJson</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">MonoBehaviour</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">PathTest</span><span class="pln"> pt</span><span class="pun">;</span><span class="pln"> </span><span class="com">// SOPro ScriptableObject</span><span class="pln">
+
+    </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Start</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">string</span><span class="pln"> file </span><span class="pun">=</span><span class="pln"> pt</span><span class="pun">.</span><span class="typ">ToJson</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Returns the path and name of the file</span><span class="pln">
+
+        </span><span class="kwd">bool</span><span class="pln"> ok </span><span class="pun">=</span><span class="pln"> </span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pun">.</span><span class="typ">FromJson</span><span class="pun">(</span><span class="kwd">out</span><span class="pln"> pt</span><span class="pun">,</span><span class="pln"> file</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="pln">ok</span><span class="pun">)</span><span class="pln">
+		</span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">Debug</span><span class="pun">.</span><span class="typ">LogError</span><span class="pun">(</span><span class="str">"Json Error"</span><span class="pun">);</span><span class="pln">
+		</span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+
+</span><span class="pun">}</span></code></pre>
+				
+			<p></p>
+		</td>
+	</tr>
+</tbody></table>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCEE">&lt;- Previous</a>
+	<a href="#sectionCEG">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCEG" style="display: none;">
+	<span class="label1">FromJson</span>
+	<section>
+		<p>
+			</p><table>
+	<tbody><tr><td><br></td></tr>
+	<tr>
+		<td>bool</td>
+		<td colspan="2"><b>FromJson</b>(out SOPro.ScriptableObject sopro, string file)</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Description</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">Converts a File containing a Json string into a ScriptableObject Pro object<br>
+Note: this is a static method called using SSSoftware.SOPro.ScriptableObject.FromJson<br>
+This method will try to use Newtonsoft.Json if it is installed, if not it will fallback to the Unity JsonUtility
+</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Parameters</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>sopro</td>
+		<td>The Scriptable Object to write to</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>file</td>
+		<td>The path+file to read the Json data from</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Return values</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>bool</td>
+		<td>true if sucessful, false if an error occured</td>
+		<td></td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Example</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">
+			<p>
+				</p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">TestJson</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">MonoBehaviour</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">PathTest</span><span class="pln"> pt</span><span class="pun">;</span><span class="pln"> </span><span class="com">// SOPro ScriptableObject</span><span class="pln">
+
+    </span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Start</span><span class="pun">()</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">string</span><span class="pln"> file </span><span class="pun">=</span><span class="pln"> pt</span><span class="pun">.</span><span class="typ">ToJson</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Returns the path and name of the file</span><span class="pln">
+
+        </span><span class="kwd">bool</span><span class="pln"> ok </span><span class="pun">=</span><span class="pln"> </span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pun">.</span><span class="typ">FromJson</span><span class="pun">(</span><span class="kwd">out</span><span class="pln"> pt</span><span class="pun">,</span><span class="pln"> file</span><span class="pun">);</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(!</span><span class="pln">ok</span><span class="pun">)</span><span class="pln">
+		</span><span class="pun">{</span><span class="pln">
+            </span><span class="typ">Debug</span><span class="pun">.</span><span class="typ">LogError</span><span class="pun">(</span><span class="str">"Json Error"</span><span class="pun">);</span><span class="pln">
+		</span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+			<p></p>
+		</td>
+	</tr>
+</tbody></table>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCEF">&lt;- Previous</a>
+	<a href="#sectionCEH">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCEH" style="display: none;">
+	<span class="label1">CreateInstance</span>
+	<section>
+		<p>
+			As with UnityEngine.ScriptableObject.CreateInstance 
+SOPro.CreateInstance can be used to create instances of a 
+ScriptableObject class at runtime. Unlike the UnityEngine implementation
+ runtime SOPro ScriptableObjects will persist their data.
+<br>
+
+<br>
+There are 3 extensions to the UnityEngine CreateInstance method, all 
+effectively the same. You must supply an instanceName string variable to
+ the method and this will be used in the following way, if a runtime 
+object is known with this name that object will be loaded. If the name 
+is not known then the instance will be created and this name will be 
+assigned to it.
+<br>
+
+<br>
+The runtime object catalog is stored in a file called sopro.dat in the 
+persistentData folder. Deleting this file will reset the data catalog 
+but not the actual SOPro data files. To delete the associated SOPro data
+ files you must also delete those files manually. you will be able to 
+recognise them because they will have a very high file number/name.
+<br>
+
+<br>
+</p><table>
+	<tbody><tr><td><br></td></tr>
+	<tr>
+		<td>ScriptableObject</td>
+		<td colspan="2"><b>static CreateInstance</b>(string className, string instanceName=null)</td>
+	</tr>
+	<tr>
+		<td>ScriptableObject</td>
+		<td colspan="2"><b>static CreateInstance</b>(Type type, string instanceName=null)</td>
+	</tr>
+	<tr>
+		<td>Tt</td>
+		<td colspan="2"><b>static CreateInstance&lt;T&gt;</b>(string instanceName=null)</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Description</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">Create a runtime instance of a ScriptableObject class</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Parameters</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>className</td>
+		<td>The name of the class to create</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>type</td>
+		<td>The Type of the class to create</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>instanceName</td>
+		<td>Unique name to be givven to this instance. This name will be used to index the runtime created objects<br>
+if the instance name is not found in the index a new instance is 
+created. If the instance name already exists the saved instance will be 
+used.<br>
+If no instance name is given then the ScriptableObject will not persist its data.
+</td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Return values</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>ScriptableObject</td>
+		<td>The created ScriptableObject instance</td>
+		<td></td>
+	</tr>
+	<tr><td><br></td></tr>
+	<tr>
+		<td></td>
+		<td><i>Example</i></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">
+			<p>
+				</p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+        </span><span class="typ">RuntimeSO</span><span class="pln"> runtimeSO </span><span class="pun">=</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pun">.</span><span class="typ">CreateInstance</span><runtimeso><span class="pun">(</span><span class="str">"mySO"</span><span class="pun">);</span></runtimeso></code></pre>
+Create an instance of the RuntimeSO class and index it with the name mySO
+			<p></p>
+		</td>
+	</tr>
+</tbody></table>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCEG">&lt;- Previous</a>
+	<a href="#sectionCF">Next -&gt;</a>
+	</p><br><br>
+</div>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCDA">&lt;- Previous</a>
+	<a href="#sectionCEA">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCF" style="display: none;">
+	<span class="label1">Attributes</span>
+	<section>
+		<p>
+			Attributes applicable to ScriptableObject Pro classes
+<br>
+
+<br>
+Namespace <b>SSSoftware.Attributes</b>
+		</p>
+<div class="subcontent" id="sectionCFA" style="display: none;">
+	<span class="label1">Immutable</span>
+	<section>
+		<p>
+			Attribute
+<br>
+
+<br>
+Example usage
+<br>
+
+<br>
+<b>[SSSoftware.Attributes.Immutable]
+<br>
+public int myInt;
+<br>
+
+<br>
+using SSSoftware.Attributes;
+<br>
+
+<br>
+[Immutable]
+<br>
+public int myInt;
+<br>
+</b>
+<br>
+
+<br>
+The Immutable attribute can only be applied at field level.
+<br>
+
+<br>
+The Immutable attribute means that ScriptableObjectPro will not serialize the field and so changes will not persist.
+<br>
+Using this attribute can offer significant performance improvements when
+ a ScriptableObject contains a mixture of immutable and mutables fields.
+<br>
+
+<br>
+Please refer to <a href="#sectionEC">Immutable Fields</a> for example usage
+<br>
+<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCF">&lt;- Previous</a>
+	<a href="#sectionCFB">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCFB" style="display: none;">
+	<span class="label1">Mutable</span>
+	<section>
+		<p>
+			Attribute
+<br>
+
+<br>
+Example usage
+<br>
+
+<br>
+<b>[SSSoftware.Attributes.Mutable]
+<br>
+public int myInt;
+<br>
+
+<br>
+using SSSoftware.Attributes;
+<br>
+[Mutable]
+<br>
+public class mySOPro : SSSoftware.SOPro.ScriptableObject
+<br>
+</b>
+<br>
+
+<br>
+Using the Mutable attribute allows ScriptableObject Pro to save and load changes to the data at runtime.
+<br>
+
+<br>
+The Mutable attribute can be applied at class or field level.
+<br>
+
+<br>
+If this attribute is applied at class level then all public serializable fields in the class will also be mutable.
+<br>
+
+<br>
+If the attribute is NOT applied at class level then only those fields to
+ which the [Mutable] attribute is applied will be serialized. A 
+ScriptableObject Pro derived class must have at least one [Mutable] 
+field.
+<br>
+
+<br>
+Unlike other serializers, applying the [Mutable] attribute to non public fields will also enable the field to be sertialized.
+<br>
+
+<br>
+Please refer to <a href="#sectionEA">Mutable Class</a> and <a href="#Main\Example Code\Mutables Fields$">Mutables Fields</a> for example usage<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCFA">&lt;- Previous</a>
+	<a href="#sectionCFC">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCFC" style="display: none;">
+	<span class="label1">PersistAcrossBuilds</span>
+	<section>
+		<p>
+			Attribute
+<br>
+
+<br>
+Example usage
+<br>
+
+<br>
+<b>[SSSoftware.Attributes.PersistAcrossBuilds]
+<br>
+public class mySOPro : SSSoftware.SOPro.ScriptableObject
+<br>
+
+<br>
+using SSSoftware.Attributes;
+<br>
+[PersistAcrossBuilds]
+<br>
+public class mySOPro : SSSoftware.SOPro.ScriptableObject
+<br>
+</b>
+<br>
+
+<br>
+Using the PersistAcrossBuilds attribute will stop the system from 
+overwriting the saved data when a new build of the application is run 
+for the first time.
+<br>
+<b>Important</b> This attribute should NOT be used when ANY change has been made to the ScriptableObject data structure.
+<br>
+
+<br>
+Note: ScriptableObjects which contain UnityObjects can become unstable when this attribute is applied. Refer to <a href="#sectionEF">Persist Unity Objects</a> for an example workaround to this.<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCFB">&lt;- Previous</a>
+	<a href="#sectionCFD">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCFD" style="display: none;">
+	<span class="label1">ResetOnError</span>
+	<section>
+		<p>
+			Attribute
+<br>
+
+<br>
+Example usage
+<br>
+
+<br>
+<b>[SSSoftware.Attributes.ResetOnError]
+<br>
+public class mySOPro : SSSoftware.SOPro.ScriptableObject
+<br>
+
+<br>
+using SSSoftware.Attributes;
+<br>
+[ResetOnError]
+<br>
+public class mySOPro : SSSoftware.SOPro.ScriptableObject
+<br>
+</b>
+<br>
+Applying this attribute to a ScriptableObject Pro class will cause the 
+ScriptableObject to be reset to it's original build values if the 
+ScriptableObject Pro file has been modified in any way.
+<br>
+This attribute can be applied to automatically enforce the anti-cheat protection without affecting game play.
+<br>
+
+<br>
+If neither this or the QuitOnError attribute are applied you are responsible for catching and handling errors.<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCFC">&lt;- Previous</a>
+	<a href="#sectionCFE">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCFE" style="display: none;">
+	<span class="label1">QuitOnError</span>
+	<section>
+		<p>
+			Attribute
+<br>
+
+<br>
+Example usage
+<br>
+
+<br>
+<b>[SSSoftware.Attributes.QuitOnError]
+<br>
+public class mySOPro : SSSoftware.SOPro.ScriptableObject
+<br>
+
+<br>
+using SSSoftware.Attributes;
+<br>
+[QuitOnError]
+<br>
+public class mySOPro : SSSoftware.SOPro.ScriptableObject
+<br>
+</b>
+<br>
+Applying this attribute to ANY ScriptableObject Pro class will force the
+ application to Quit is the ScriptableObject Pro file has been modified 
+in any way.
+<br>
+
+<br>
+This attribute should be applied with caution because once it has fired 
+the only way that the application can be run again is by manually 
+deleting the modified ScriptableObject Pro file from the 
+Application.persistentDataPath folder.
+<br>
+
+<br>
+If neither this or the ResetOnError attribute are applied you are responsible for catching and handling errors.<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCFD">&lt;- Previous</a>
+	<a href="#sectionCFF">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCFF" style="display: none;">
+	<span class="label1">Trace</span>
+	<section>
+		<p>
+			Attribute
+<br>
+
+<br>
+Example usage
+<br>
+
+<br>
+<b>[SSSoftware.Attributes.Trace]
+<br>
+public int myInt;
+<br>
+
+<br>
+using SSSoftware.Attributes;
+<br>
+[Trace]
+<br>
+public class mySOPro : SSSoftware.SOPro.ScriptableObject
+<br>
+</b>
+<br>
+
+<br>
+Addiing the Trace attribute to ANY SPOro object will turn on detailed 
+logging of all SOPro objects to aid in debugging development builds at 
+runtime<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCFE">&lt;- Previous</a>
+	<a href="#sectionCFG">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCFG" style="display: none;">
+	<span class="label1">NoTrace</span>
+	<section>
+		<p>
+			Attribute
+<br>
+
+<br>
+Example usage
+<br>
+
+<br>
+<b>[SSSoftware.Attributes.NoTrace]
+<br>
+public int myInt;
+<br>
+
+<br>
+using SSSoftware.Attributes;
+<br>
+[NoTrace]
+<br>
+public class mySOPro : SSSoftware.SOPro.ScriptableObject
+<br>
+</b>
+<br>
+
+<br>
+Addiing the NoTrace attribute to ANY SPOro object will turn off detailed
+ logging for all SOPro objects. It is recommended to use this attribute 
+when making a production build of your project.<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCFF">&lt;- Previous</a>
+	<a href="#sectionCG">Next -&gt;</a>
+	</p><br><br>
+</div>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCEH">&lt;- Previous</a>
+	<a href="#sectionCFA">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionCG" style="display: none;">
+	<span class="label1">Exceptions</span>
+	<section>
+		<p>
+			Exceptions are thrown only when it is impossible for the system to recover.
+<br>
+
+<br>
+In the case of the run time exceptions it is strongly recommended that these be caught and a call to Application.Quit() be made.
+<br>
+Refer to <a href="#sectionCEC">OnEnable</a> for an example of how to implement this.
+<br>
+
+<br>
+<b>ArgumentNullException</b>
+<br>
+This exception may be thrown when the ScriptableObject Pro files are 
+being created. It is an indication that no mutable fields were found in a
+ class.
+<br>
+
+<br>
+<b>FileNotFoundException</b>
+<br>
+This exception will be thrown when the system is unable to save the 
+state of an object. It is possibly a permissions or file size problem.
+<br>
+
+<br>
+<b>FileLoadException</b>
+<br>
+This exception will be thrown when a ScriptableObject Pro file has been tampered with.
+<br>
+Refer to the <a href="#sectionCFD">ResetOnError</a> and <a href="#sectionCFE">QuitOnError</a> attributes for possibile remedial actions.
+<br>
+This exception may also be thrown when trying to load a file to a ScriptableObject with a modified data structure.
+<br>
+
+<br>
+<b>ArgumentOutOfRangeException</b>
+<br>
+This exception will be thrown when trying to load a file created with an incompatible version of ScriptableObject Pro.
+<br>
+<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCFG">&lt;- Previous</a>
+	<a href="#sectionD">Next -&gt;</a>
+	</p><br><br>
+</div>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionB">&lt;- Previous</a>
+	<a href="#sectionCA">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="content" id="sectionD" style="display: none;">
+	<h2>Testing</h2>
+	<section>
+		<p>
+			In order to test the correct functioning of ScriptableObject Pro at 
+run time but without having to make a build of your project several menu
+ options are available at
+<br>
+
+<br>
+<b>Tools-&gt;ScriptableObject Pro</b>
+<br>
+
+<br>
+<br>
+		</p>
+<div class="subcontent" id="sectionDA" style="display: none;">
+	<span class="label1">Manage Data Files</span>
+	<section>
+		<p>
+			Unity menu option 
+<br>
+
+<br>
+<b>Tools-&gt;ScriptableObject Pro-&gt;Manage Data Files</b>
+<br>
+
+<br>
+This option brings up a small Editor Window with 2 options
+<br>
+
+<br>
+<b>Open Persistent Data Folder</b>
+<br>
+Opens the file explorer in the projects Application.persistentDataPath
+<br>
+
+<br>
+<b>Clear SO Pro Persistent Data</b>
+<br>
+Deletes all .so files in the projects Application.persistentDataPath
+<br>
+<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionD">&lt;- Previous</a>
+	<a href="#sectionDB">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionDB" style="display: none;">
+	<span class="label1">Enable in Play Mode</span>
+	<section>
+		<p>
+			Unity menu option 
+<br>
+
+<br>
+<b>Tools-&gt;ScriptableObject Pro-&gt;Enable in Play Mode</b>
+<br>
+
+<br>
+This option turns ON the ScriptableObject Pro utility when entering Play Mode in the Unity Editor.
+<br>
+
+<br>
+Additional debugging information will be shown in the Unity Console.
+<br>
+
+<br>
+Note: In order to test data persistence in Editor Play Mode the 
+ScriptableObject must implement the [PersistAcrossBuilds] attribute.<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionDA">&lt;- Previous</a>
+	<a href="#sectionDC">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionDC" style="display: none;">
+	<span class="label1">Disable in Play Mode</span>
+	<section>
+		<p>
+			Unity menu option 
+<br>
+
+<br>
+<b>Tools-&gt;ScriptableObject Pro-&gt;Disable in Play Mode</b>
+<br>
+
+<br>
+This option turns OFF the ScriptableObject Pro utility when entering Play Mode in the Unity Editor.
+<br>
+
+<br>
+<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionDB">&lt;- Previous</a>
+	<a href="#sectionDD">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionDD" style="display: none;">
+	<span class="label1">Enable Debug</span>
+	<section>
+		<p>
+			Unity menu option 
+<br>
+
+<br>
+<b>Tools-&gt;ScriptableObject Pro-&gt;EnableDebug</b>
+<br>
+
+<br>
+This option turns ON the ScriptableObject Pro Debug messages
+<br>
+
+<br>
+Additional debugging information will be shown in the Unity Console.
+<br>
+
+<br>
+This option can also be called via code
+<br>
+
+<br>
+</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	 </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">SOProDebug</span><span class="pun">.</span><span class="typ">Trace</span><span class="pun">=</span><span class="kwd">true</span><span class="pun">;</span></code></pre>
+<p></p>
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionDC">&lt;- Previous</a>
+	<a href="#sectionDE">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionDE" style="display: none;">
+	<span class="label1">Disable Debug</span>
+	<section>
+		<p>
+			Unity menu option 
+<br>
+
+<br>
+<b>Tools-&gt;ScriptableObject Pro-&gt;DisableDebug</b>
+<br>
+
+<br>
+This option turns OFF the ScriptableObject Pro Debug messages
+<br>
+
+<br>
+NO debugging information will be shown in the Unity Console.
+<br>
+
+<br>
+This option can also be called via code
+<br>
+
+<br>
+</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+	 </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">SOProDebug</span><span class="pun">.</span><span class="typ">Trace</span><span class="pun">=</span><span class="kwd">false</span><span class="pun">;</span></code></pre>
+<p></p>
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionDD">&lt;- Previous</a>
+	<a href="#sectionE">Next -&gt;</a>
+	</p><br><br>
+</div>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionCG">&lt;- Previous</a>
+	<a href="#sectionDA">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="content" id="sectionE" style="display: none;">
+	<h2>Example Code</h2>
+	<section>
+		<p>
+			Here I will publish code to illustrate the various usages of ScriptableObject Pro.
+<br>
+
+<br>
+This code is copyright SteveSmith.Software 2022. But may be used as is or in a modified form under the MIT License.
+<br>
+
+<br>
+No warranty of useability or support will be applicable for the use of code derived from these examples.
+<br>
+
+<br>
+More example code can be found at <a href="https://github.com/SteveSmithSoftware/ScriptableObjectPro">ScriptableObject Pro on GitHub</a>
+		</p>
+<div class="subcontent" id="sectionEA" style="display: none;">
+	<span class="label1">Mutable Class</span>
+	<section>
+		<p>
+			Apply the [Mutable] attribute to a class.
+<br>
+
+<br>
+All of the serializable fields in the class will become mutable
+<br>
+
+<br>
+</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">Attributes</span><span class="pun">;</span><span class="pln">
+
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pun">(</span><span class="pln">fileName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"MySO"</span><span class="pun">)]</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">Mutable</span><span class="pun">]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pun">[]</span><span class="pln"> waypoints</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pln"> currPosition</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionE">&lt;- Previous</a>
+	<a href="#sectionEB">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionEB" style="display: none;">
+	<span class="label1">Mutable Fields</span>
+	<section>
+		<p>
+			Apply the [Mutable] attribute to a field.
+<br>
+
+<br>
+Only those fields with the attribute will be mutable
+<br>
+
+<br>
+</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">Attributes</span><span class="pun">;</span><span class="pln">
+
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pun">(</span><span class="pln">fileName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"MySO"</span><span class="pun">)]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+     </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pun">[]</span><span class="pln"> waypoints</span><span class="pun">;</span><span class="pln">
+     </span><span class="pun">[</span><span class="typ">Mutable</span><span class="pun">]</span><span class="pln">
+     </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pln"> currPosition</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+In this example changes to currPosition will be persisted. Changes to waypoints will NOT persist.
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionEA">&lt;- Previous</a>
+	<a href="#sectionEC">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionEC" style="display: none;">
+	<span class="label1">Immutable Fields</span>
+	<section>
+		<p>
+			Apply the [Mutable] attribute to a class.or to fields
+<br>
+Apply the [Immutable] attribute to fields to be ignored
+<br>
+
+<br>
+</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">Attributes</span><span class="pun">;</span><span class="pln">
+
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pun">(</span><span class="pln">fileName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"MySO"</span><span class="pun">)]</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">Mutable</span><span class="pun">]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+     </span><span class="pun">[</span><span class="typ">Immutable</span><span class="pun">]</span><span class="pln">
+     </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pun">[]</span><span class="pln"> waypoints</span><span class="pun">;</span><span class="pln">
+     </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pln"> currPosition</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">Attributes</span><span class="pun">;</span><span class="pln">
+
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pun">(</span><span class="pln">fileName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"MySO"</span><span class="pun">)]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+     </span><span class="pun">[</span><span class="typ">Immutable</span><span class="pun">]</span><span class="pln">
+     </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pun">[]</span><span class="pln"> waypoints</span><span class="pun">;</span><span class="pln">
+     </span><span class="pun">[</span><span class="typ">Mutable</span><span class="pun">]</span><span class="pln">
+     </span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pln"> currPosition</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+In these examples changes to currPosition will be persisted. Changes to waypoints will NOT persist.
+<br>
+
+<br>
+
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionEB">&lt;- Previous</a>
+	<a href="#sectionED">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionED" style="display: none;">
+	<span class="label1">User defined Save</span>
+	<section>
+		<p>
+			</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">Attributes</span><span class="pun">;</span><span class="pln">
+
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pun">(</span><span class="pln">fileName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"MySO"</span><span class="pun">)]</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">Mutable</span><span class="pun">]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pln"> currPosition</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MyScript</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">MonoBehaviour</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> so</span><span class="pun">;</span><span class="pln">
+
+	</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Start</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		transform</span><span class="pun">.</span><span class="pln">localPosition </span><span class="pun">=</span><span class="pln"> so</span><span class="pun">.</span><span class="pln">currPosition</span><span class="pun">;</span><span class="pln">
+		so</span><span class="pun">.</span><span class="typ">AutoSaveOff</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Do not autosave</span><span class="pln">
+	</span><span class="pun">}</span><span class="pln">
+
+	</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Update</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		so</span><span class="pun">.</span><span class="pln">currPosition </span><span class="pun">=</span><span class="pln"> transform</span><span class="pun">.</span><span class="pln">position</span><span class="pun">;</span><span class="pln">
+		so</span><span class="pun">.</span><span class="typ">Save</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Save every Update</span><span class="pln">
+	</span><span class="pun">}</span><span class="pln">
+
+	</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">OnApplicationQuit</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		so</span><span class="pun">.</span><span class="pln">currPosition </span><span class="pun">=</span><span class="pln"> transform</span><span class="pun">.</span><span class="pln">position</span><span class="pun">;</span><span class="pln">
+		so</span><span class="pun">.</span><span class="typ">Save</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Save On Exit</span><span class="pln">
+	</span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionEC">&lt;- Previous</a>
+	<a href="#sectionEE">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionEE" style="display: none;">
+	<span class="label1">AutoSave</span>
+	<section>
+		<p>
+			</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">Attributes</span><span class="pun">;</span><span class="pln">
+
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pun">(</span><span class="pln">fileName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"MySO"</span><span class="pun">)]</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">Mutable</span><span class="pun">]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Vector3</span><span class="pln"> currPosition</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MyScript</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">MonoBehaviour</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> so</span><span class="pun">;</span><span class="pln">
+
+	</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Start</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		transform</span><span class="pun">.</span><span class="pln">localPosition </span><span class="pun">=</span><span class="pln"> so</span><span class="pun">.</span><span class="pln">currPosition</span><span class="pun">;</span><span class="pln">
+		so</span><span class="pun">.</span><span class="typ">AutoSaveOn</span><span class="pun">(</span><span class="lit">0.5f</span><span class="pun">);</span><span class="pln"> </span><span class="com">// Autosave every half second and On Exit</span><span class="pln">
+	</span><span class="pun">}</span><span class="pln">
+
+	</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Update</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		so</span><span class="pun">.</span><span class="pln">currPosition </span><span class="pun">=</span><span class="pln"> transform</span><span class="pun">.</span><span class="pln">position</span><span class="pun">;</span><span class="pln">
+	</span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionED">&lt;- Previous</a>
+	<a href="#sectionEF">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionEF" style="display: none;">
+	<span class="label1">Persist Unity Objects</span>
+	<section>
+		<p>
+			Persisting UnityObjects across builds could cause instability in the ScriptableObject save file.
+<br>
+
+<br>
+Using an index into an array of objects stored on a MonoBehaviour will mitigate this potential problem.
+<br>
+
+<br>
+<b>Before</b> (May NOT Persist across builds)
+<br>
+
+<br>
+</p><p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">Attributes</span><span class="pun">;</span><span class="pln">
+
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pun">(</span><span class="pln">fileName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"MySO"</span><span class="pun">)]</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">Mutable</span><span class="pun">]</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">PersistAcrossBuilds</span><span class="pun">]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Material</span><span class="pln"> currMat</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MyScript</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">MonoBehaviour</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> so</span><span class="pun">;</span><span class="pln">
+
+	</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Start</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		</span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">so</span><span class="pun">.</span><span class="pln">currMat </span><span class="pun">!=</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">)</span><span class="pln">
+		</span><span class="pun">{</span><span class="pln">
+			</span><span class="typ">MeshRenderer</span><span class="pln"> mr </span><span class="pun">=</span><span class="pln"> </span><span class="typ">GetComponent</span><meshrenderer><span class="pun">();</span><span class="pln">
+			mr</span><span class="pun">.</span><span class="pln">material </span><span class="pun">=</span><span class="pln"> so</span><span class="pun">.</span><span class="pln">currMat</span><span class="pun">;</span><span class="pln">
+		</span><span class="pun">}</span><span class="pln">
+	</span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></meshrenderer></code></pre>
+<p></p>
+<br>
+
+<br>
+<b>After</b> (Will persist across builds)
+<br>
+
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">Attributes</span><span class="pun">;</span><span class="pln">
+
+</span><span class="pun">[</span><span class="typ">CreateAssetMenu</span><span class="pun">(</span><span class="pln">fileName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"New MySO"</span><span class="pun">,</span><span class="pln"> menuName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"MySO"</span><span class="pun">)]</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">Mutable</span><span class="pun">]</span><span class="pln">
+</span><span class="pun">[</span><span class="typ">PersistAcrossBuilds</span><span class="pun">]</span><span class="pln">
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">SSSoftware</span><span class="pun">.</span><span class="typ">SOPro</span><span class="pun">.</span><span class="typ">ScriptableObject</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">int</span><span class="pln"> currMat</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+<p></p>
+<br>
+<p></p><pre style="width:100%"><code class="prettyprint prettyprinted" style=""><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">UnityEngine</span><span class="pun">;</span><span class="pln">
+
+</span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MyScript</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">MonoBehaviour</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">MySO</span><span class="pln"> so</span><span class="pun">;</span><span class="pln">
+	</span><span class="kwd">public</span><span class="pln"> </span><span class="typ">Material</span><span class="pun">[]</span><span class="pln"> materials</span><span class="pun">;</span><span class="pln">
+
+	</span><span class="kwd">void</span><span class="pln"> </span><span class="typ">Start</span><span class="pun">()</span><span class="pln">
+	</span><span class="pun">{</span><span class="pln">
+		</span><span class="typ">MeshRenderer</span><span class="pln"> mr </span><span class="pun">=</span><span class="pln"> </span><span class="typ">GetComponent</span><meshrenderer><span class="pun">();</span><span class="pln">
+		mr</span><span class="pun">.</span><span class="pln">material </span><span class="pun">=</span><span class="pln"> materials</span><span class="pun">[</span><span class="pln">so</span><span class="pun">.</span><span class="pln">currMat</span><span class="pun">];</span><span class="pln">
+	</span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></meshrenderer></code></pre>
+<p></p>
+<br>
+<br>
+		<p></p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionEE">&lt;- Previous</a>
+	<a href="#sectionF">Next -&gt;</a>
+	</p><br><br>
+</div>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionDE">&lt;- Previous</a>
+	<a href="#sectionEA">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="content" id="sectionF" style="display: none;">
+	<h2>Supported Datatypes</h2>
+	<section>
+		<p>
+			ScriptableObject Pro supports many C# and Unity data types.
+<br>
+
+<br>
+Some data types not supported by Unity ScriptableObjects are supported by Scriptableobjects Pro as mutable data.<br>
+		</p>
+<div class="subcontent" id="sectionFA" style="display: none;">
+	<span class="label1">C# Data types</span>
+	<section>
+		<p>
+			The following C# data types are supported by ScriptableObject Pro
+<br>
+
+<br>
+<b>Primitive Data Types</b>
+<br>
+
+<br>
+byte
+<br>
+sbyte
+<br>
+char
+<br>
+ushort
+<br>
+short
+<br>
+uint
+<br>
+int
+<br>
+ulong
+<br>
+long
+<br>
+decimal
+<br>
+float
+<br>
+double
+<br>
+string
+<br>
+
+<br>
+<b>C# Structs</b>
+<br>
+
+<br>
+TimeSpan
+<br>
+
+<br>
+<b>C# Classes</b>
+<br>
+
+<br>
+User defined classes must have the [Serializable] attribute.
+<br>
+Classes must have either the [Mutable] attribute or one or more fields with the [Mutable] attribute in the class
+<br>
+
+<br>
+DateTime
+<br>
+Action
+<br>
+
+<br>
+Array&lt;T&gt; where T is a C# primitive type
+<br>
+This includes
+<br>
+Array[] with any number of ranks
+<br>
+and jagged arrays of any depth
+<br>
+
+<br>
+List&lt;T&gt; where T is a C# primitive type
+<br>
+
+<br>
+Dictionary&lt;T1,T2&gt; where T1 and T2 are C# primitive types
+<br>
+
+<br>
+To have these data types extended please refer to <a href="#sectionGB">Change Requests</a>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionF">&lt;- Previous</a>
+	<a href="#sectionFB">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionFB" style="display: none;">
+	<span class="label1">Unity Data types</span>
+	<section>
+		<p>
+			The following Unity data types are supported by ScriptableObject Pro
+<br>
+
+<br>
+Vector2
+<br>
+Vector2Int
+<br>
+Vector3
+<br>
+Vector3Int
+<br>
+Vector4
+<br>
+Quaternion
+<br>
+Color
+<br>
+Color32
+<br>
+Rect
+<br>
+Rectint
+<br>
+Matrix4x4
+<br>
+Bounds
+<br>
+BoundsInt
+<br>
+BoneWeight
+<br>
+BoneWeight1
+<br>
+KeyFrame
+<br>
+AnimationCurve
+<br>
+
+<br>
+The utility also supports
+<br>
+
+<br>
+Array&lt;T&gt; where T is one of the above.
+<br>
+This includes
+<br>
+Array[]
+<br>
+Array[,]
+<br>
+Array[,,]
+<br>
+And jagged arrays
+<br>
+
+<br>
+List&lt;T&gt; where T is one of the above
+<br>
+
+<br>
+Dictionary&lt;T1,T2&gt; where T1 and/or T2 are one of the above or C# primitive types
+<br>
+
+<br>
+NativeArrayt&lt;T&gt; where T is one of the above or a C# primitive type
+<br>
+
+<br>
+To have these data types extended please refer to <a href="#sectionGB">Change Requests</a>
+<br>
+
+<br>
+<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionFA">&lt;- Previous</a>
+	<a href="#sectionFC">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionFC" style="display: none;">
+	<span class="label1">Unity Objects</span>
+	<section>
+		<p>
+			Scriptable Object Pro can save and load any object that derives from UnityEngine.Object with the following proviso.
+<br>
+
+<br>
+The utility does NOT serialize the actual object but holds a reference into the Unity Resources database.
+<br>
+
+<br>
+Therefore all Unity Objects that need to be saved/loaded MUST be present
+ in the Unity Resources database at the time of project build.
+<br>
+So GameObjects which are prefabs or present in a scene can be saved. GameObjects which are instantiated at runtime can not.
+<br>
+
+<br>
+Note: Usage of the <a href="#sectionCFC">PersistAcrossBuilds</a> attribute can cause instability in the ScriptableObject when UnityEngine Objects are used. Refer to <a href="#sectionEF">Persist Unity Objects</a> for an example of a workaround.
+<br>
+<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionFB">&lt;- Previous</a>
+	<a href="#sectionG">Next -&gt;</a>
+	</p><br><br>
+</div>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionEF">&lt;- Previous</a>
+	<a href="#sectionFA">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="content" id="sectionG" style="display: none;">
+	<h2>Additional Information</h2>
+	<section>
+		<p>
+			
+		</p>
+<div class="subcontent" id="sectionGA" style="display: none;">
+	<span class="label1">Support</span>
+	<section>
+		<p>
+			Support can only be offered to users using Unity LTS versions
+<br>
+
+<br>
+Please contact SteveSmith.Software via one of the following channels
+<br>
+
+<br>
+To file a Bug Report: <a href="https://stevesmith.software/">SteveSmith.Software</a> Choose the Contact tab and login as guest
+<br>
+
+<br>
+Email: <a href="mailto:sopro@stevesmith.software">SOPro@SteveSmith.Software</a>
+<br>
+
+<br>
+Discord: Join our discord channel at <a href="https://discord.gg/pNegxNr">SteveSmith.Software on discord</a>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionG">&lt;- Previous</a>
+	<a href="#sectionGB">Next -&gt;</a>
+	</p><br><br>
+</div>
+<div class="subcontent" id="sectionGB" style="display: none;">
+	<span class="label1">Change Requests</span>
+	<section>
+		<p>
+			ScriptableObject Pro aims to be the ultimate serializer/deserialzer for Unity projects.
+<br>
+
+<br>
+Any request for additional data type implementation or support will be treated as a matter of urgency
+<br>
+
+<br>
+Please email <a href="mailto:sopro@stevesmith.software">SOPro@SteveSmith.Software</a> with your request<br>
+		</p>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionGA">&lt;- Previous</a>
+	</p><br><br>
+</div>
+	</section>
+	<p style="text-align:right">
+	<a href="#sectionFC">&lt;- Previous</a>
+	<a href="#sectionGA">Next -&gt;</a>
+	</p><br><br>
+</div>
+
+	<footer class="footer"><b>© SteveSmith.Software</b> 2018. All Rights Reserved.</footer>
+
+
+
+</body></html>

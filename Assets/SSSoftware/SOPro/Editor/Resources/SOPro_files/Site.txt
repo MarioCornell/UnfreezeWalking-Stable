@@ -1,0 +1,23 @@
+﻿$(document).ready(function (event) {
+	$('.content').hide();
+	$('.subcontent').hide();
+	$('#sectionA').show();
+});
+$(document).on('click', 'li', function (event) {
+	$(this).children('ul').toggle();
+	event.stopPropagation();
+});
+$(document).on('click', 'a', function (event) {
+	if ($(this.hash).hasClass('fsm')) {
+		event.stopPropagation();
+		$(this.hash).click();
+	} else {
+		$('.content').hide();
+		$('.subcontent').hide();
+		for (var i = 6; i <= this.hash.length; i++) {
+			try {
+				$(this.hash.substring(0, i)).show();
+			} catch { }
+		}
+	}
+});

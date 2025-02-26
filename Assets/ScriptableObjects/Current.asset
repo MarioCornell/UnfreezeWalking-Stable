@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d4a617914a241a9abc3fc8742af7a7, type: 3}
+  m_Name: Current
+  m_EditorClassIdentifier: 
+  FileId: -441164
+  dateUpdated: 638543164322210010
+  _path: 
+  TotalDistance: 10
+  DistanceBetweenSteps: 1
+  RotationOffset: 0
+  StepScale: {x: 2, y: 0.3, z: 0.3}
