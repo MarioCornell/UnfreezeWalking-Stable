@@ -1447,6 +1447,7 @@ MonoBehaviour:
   - {fileID: 0}
   TotalDistanceSlider: {fileID: 0}
   DistanceBetweenStepsSlider: {fileID: 0}
+  DoorScaleSlider: {fileID: 0}
   RotationOffsetSlider: {fileID: 0}
   StepDoorParent: {fileID: 1431329647}
   ReferenceStep: {fileID: 2105880939}
@@ -1930,7 +1931,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &8580107453555209715
 MeshFilter:
   m_ObjectHideFlags: 0

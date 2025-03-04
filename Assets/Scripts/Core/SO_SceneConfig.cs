@@ -8,6 +8,7 @@ public class SO_SceneConfig : SSSoftware.SOPro.ScriptableObject
     
     public float TotalDistance = 10f;
     public float DistanceBetweenSteps = 1f;
+    public float DoorScale = 1f;
     
     // from -180 to 180
     public float RotationOffset = 0f;

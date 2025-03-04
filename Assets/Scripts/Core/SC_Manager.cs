@@ -14,6 +14,7 @@ public class SC_Manager : NetworkBehaviour
     
     public SliderManager TotalDistanceSlider;
     public SliderManager DistanceBetweenStepsSlider;
+    public SliderManager DoorScaleSlider;
     public RadialSlider RotationOffsetSlider;
     
     public Transform StepDoorParent;
@@ -53,11 +54,13 @@ public class SC_Manager : NetworkBehaviour
         
         TotalDistanceSlider = GameObject.Find("TrialDistance").GetComponent<SliderManager>();
         DistanceBetweenStepsSlider = GameObject.Find("StrideLength").GetComponent<SliderManager>();
+        DoorScaleSlider = GameObject.Find("DoorScale").GetComponent<SliderManager>();
         RotationOffsetSlider = GameObject.Find("RotationOffset").GetComponentInChildren<RadialSlider>();
         SceneNameInputField = GameObject.Find("ScenarioNameInput").GetComponent<CustomInputField>();
         
         TotalDistanceSlider.mainSlider.onValueChanged.AddListener(OnTotalDistanceChanged);
         DistanceBetweenStepsSlider.mainSlider.onValueChanged.AddListener(OnDistanceBetweenStepsChanged);
+        DoorScaleSlider.mainSlider.onValueChanged.AddListener(OnDoorScaleChanged);
         RotationOffsetSlider.onValueChanged.AddListener(OnRotationOffsetChanged);
         
         // Find and assign all button references
@@ -110,14 +113,15 @@ public class SC_Manager : NetworkBehaviour
     private string BuildStringFromConfig(int index)
     {
         var config = SceneConfigPresets[index];
-        
+    
         string result = ""; 
         result += $"{config.PresetName}\n";
         result += $"Trial Distance: {config.TotalDistance:F1}\n";
         result += $"Stride Length: {config.DistanceBetweenSteps:F1}\n";
+        result += $"Door Scale: {config.DoorScale:F1}\n";
         // only keep one decimal place for the scale
         result += $"Step Scale: {config.StepScale.x:F1} x {config.StepScale.y:F1} x {config.StepScale.z:F1}\n";
-        
+    
         return result;
     }
 
@@ -185,6 +189,11 @@ public class SC_Manager : NetworkBehaviour
         Door.transform.localPosition = new Vector3(0, 0, CurrentSceneConfig.TotalDistance + CurrentSceneConfig.DistanceBetweenSteps);
     }
     
+    private void UpdateDoorScale(float value)
+    {
+        Door.transform.localScale = new Vector3(value, Door.transform.localScale.y, Door.transform.localScale.z);
+    }
+    
     private void OnLoadSceneConfigButton(int index)
     {  
         // Load the scene config from the preset
@@ -193,11 +202,17 @@ public class SC_Manager : NetworkBehaviour
         CurrentSceneConfig.DistanceBetweenSteps = SceneConfigPresets[index].DistanceBetweenSteps;
         CurrentSceneConfig.StepScale = SceneConfigPresets[index].StepScale;
         CurrentSceneConfig.RotationOffset = SceneConfigPresets[index].RotationOffset;
+        CurrentSceneConfig.DoorScale = SceneConfigPresets[index].DoorScale;
 
         // Update the UI and steps after loading
         UpdateUIFromConfig();
         UpdateSteps();
         StepDoorParent.localEulerAngles = new Vector3(0, CurrentSceneConfig.RotationOffset, 0);
+        
+        if (Door != null)
+        {
+            UpdateDoorScale(CurrentSceneConfig.DoorScale);
+        }
 
         Debug.Log($"Loaded Scene Config {index}");
     }
@@ -213,6 +228,7 @@ public class SC_Manager : NetworkBehaviour
         SceneConfigPresets[index].DistanceBetweenSteps = CurrentSceneConfig.DistanceBetweenSteps;
         SceneConfigPresets[index].StepScale = CurrentSceneConfig.StepScale;
         SceneConfigPresets[index].RotationOffset = CurrentSceneConfig.RotationOffset;
+        SceneConfigPresets[index].DoorScale = CurrentSceneConfig.DoorScale;
 
         // Update the button text to reflect new config
         SceneConfigButtons[index].SetText(BuildStringFromConfig(index));
@@ -231,6 +247,8 @@ public class SC_Manager : NetworkBehaviour
             TotalDistanceSlider.mainSlider.value = CurrentSceneConfig.TotalDistance;
         if (DistanceBetweenStepsSlider != null)
             DistanceBetweenStepsSlider.mainSlider.value = CurrentSceneConfig.DistanceBetweenSteps;
+        if (DoorScaleSlider != null)
+            DoorScaleSlider.mainSlider.value = CurrentSceneConfig.DoorScale;
         if (RotationOffsetSlider != null)
             RotationOffsetSlider.currentValue = CurrentSceneConfig.RotationOffset;
 
@@ -248,6 +266,9 @@ public class SC_Manager : NetworkBehaviour
 
         if (DistanceBetweenStepsSlider != null)
             CurrentSceneConfig.DistanceBetweenSteps = DistanceBetweenStepsSlider.mainSlider.value;
+        
+        if (DoorScaleSlider != null)
+            CurrentSceneConfig.DoorScale = DoorScaleSlider.mainSlider.value;
 
         if (RotationOffsetSlider != null)
             CurrentSceneConfig.RotationOffset = RotationOffsetSlider.currentValue;
@@ -256,6 +277,12 @@ public class SC_Manager : NetworkBehaviour
             CurrentSceneConfig.StepScale = ReferenceStep.transform.localScale;
     }
 
+    private void OnDoorScaleChanged(float value)
+    {
+        CurrentSceneConfig.DoorScale = value;
+        UpdateDoorScale(value);
+    }
+    
     private void OnTotalDistanceChanged(float value)
     {
         CurrentSceneConfig.TotalDistance = value;
