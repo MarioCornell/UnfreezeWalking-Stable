@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: SceneConfig 2
   m_EditorClassIdentifier: 
   FileId: -441164
-  dateUpdated: 638719740242426180
+  dateUpdated: 638780909901834134
   _path: 
-  PresetName: Patient 1
-  TotalDistance: 14.6984625
-  DistanceBetweenSteps: 1
+  PresetName: Base Scenario
+  TotalDistance: 5.5159516
+  DistanceBetweenSteps: 0.96121186
+  DoorScale: 0.5
   RotationOffset: 0
-  StepScale: {x: 0.9076391, y: 0.3, z: 0.3}
+  StepScale: {x: 0.60419977, y: 0.16596536, z: 0.21435189}

@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: SceneConfig 4
   m_EditorClassIdentifier: 
   FileId: -441164
-  dateUpdated: 638719740242474060
+  dateUpdated: 638767019156315703
   _path: 
   PresetName: Patienr 3
-  TotalDistance: 10
+  TotalDistance: 16.616463
   DistanceBetweenSteps: 1
+  DoorScale: 1
   RotationOffset: 0
   StepScale: {x: 2, y: 0.3, z: 0.3}

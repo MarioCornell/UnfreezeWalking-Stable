@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: SceneConfig 1
   m_EditorClassIdentifier: 
   FileId: -441164
-  dateUpdated: 638701036436571690
+  dateUpdated: 638780861221828178
   _path: 
-  PresetName: Scenario 2
-  TotalDistance: 2.324707
-  DistanceBetweenSteps: 1.2562168
+  PresetName: Base Scenario2
+  TotalDistance: 4.558712
+  DistanceBetweenSteps: 0.96121186
+  DoorScale: 1.3146887
   RotationOffset: 0
-  StepScale: {x: 0.69890356, y: 0.114220716, z: 0.3}
+  StepScale: {x: 0.60419977, y: 0.16596536, z: 0.21435189}

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: NetworkConfig
   m_EditorClassIdentifier: 
   FileId: -537866
-  dateUpdated: 638719713152822120
+  dateUpdated: 638780861221798262
   _path: 
-  ServerIP: 192.168.1.197
+  ServerIP: 192.168.1.41
