@@ -1,0 +1,79 @@
+using Michsky.MUIP;
+using UnityEngine;
+using UnityEngine.UI;
+
+[RequireComponent(typeof(Button))]
+public class SC_RecButton : MonoBehaviour
+{
+    [Header("Transforms to Log")]
+    [SerializeField] private Transform headTransform;
+    [SerializeField] private Transform leftLegTransform;
+    [SerializeField] private Transform rightLegTransform;
+
+    private Button recButton;
+    [SerializeField] private Color _recordingColor;
+    [SerializeField] private Color _normalColor;
+    [SerializeField] private Image _recImage;
+
+    [SerializeField] private CustomInputField _sessionNameInput;
+
+    void Start()
+    {
+        headTransform = GameObject.Find("Head").transform;
+        leftLegTransform = GameObject.Find("LeftLeg").transform;
+        rightLegTransform = GameObject.Find("RightLeg").transform;
+
+
+        recButton = GetComponent<Button>();        
+
+        if (headTransform == null || leftLegTransform == null || rightLegTransform == null)
+        {
+            Debug.LogError("One or more transforms have not been assigned in the Inspector for SC_RecButton!", this);
+            recButton.interactable = false;
+            return;
+        }
+
+        DataLogger.Initialize(headTransform, leftLegTransform, rightLegTransform);
+        recButton.onClick.AddListener(OnRecButtonPressed);
+        UpdateButtonVisuals();
+    }
+
+    void Update()
+    {
+        DataLogger.LogFrameData();
+    }
+
+    private void OnRecButtonPressed()
+    {
+        if (DataLogger.IsLogging)
+        {
+            DataLogger.StopLogging();
+        }
+        else
+        {
+            string sessionName = (_sessionNameInput != null) ? _sessionNameInput.inputText.text : null;
+            DataLogger.StartLogging(sessionName);
+        }
+        UpdateButtonVisuals();
+    }
+
+    private void UpdateButtonVisuals()
+    {
+        if (DataLogger.IsLogging)
+        {
+            _recImage.color = _recordingColor;
+        }
+        else
+        {
+            _recImage.color = _normalColor;
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (recButton != null)
+        {
+            recButton.onClick.RemoveListener(OnRecButtonPressed);
+        }
+    }
+}

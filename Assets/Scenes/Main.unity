@@ -138,8 +138,9 @@ GameObject:
   - component: {fileID: 477221149}
   - component: {fileID: 477221148}
   - component: {fileID: 477221150}
+  - component: {fileID: 477221151}
   m_Layer: 0
-  m_Name: L
+  m_Name: LeftLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -366,6 +367,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &477221151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477221143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 776548d2968af4016bc3c80372713afb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &604924507
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -935,8 +948,9 @@ GameObject:
   - component: {fileID: 1474967388}
   - component: {fileID: 1474967389}
   - component: {fileID: 1474967390}
+  - component: {fileID: 1474967391}
   m_Layer: 0
-  m_Name: R
+  m_Name: RightLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1163,6 +1177,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1474967391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474967383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 776548d2968af4016bc3c80372713afb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1515234785
 GameObject:
   m_ObjectHideFlags: 0
@@ -1457,6 +1483,9 @@ MonoBehaviour:
     type: 3}
   Door: {fileID: 5272973074403035776}
   SceneNameInputField: {fileID: 0}
+  ScaleXInputField: {fileID: 0}
+  ScaleYInputField: {fileID: 0}
+  ScaleZInputField: {fileID: 0}
 --- !u!114 &1679050075
 MonoBehaviour:
   m_ObjectHideFlags: 0

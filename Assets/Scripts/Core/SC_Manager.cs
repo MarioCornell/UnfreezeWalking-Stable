@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 using Michsky.MUIP;
 using Unity.Netcode;
+using Sirenix.OdinInspector;
 
 public class SC_Manager : NetworkBehaviour
 {
@@ -24,12 +25,30 @@ public class SC_Manager : NetworkBehaviour
     public SC_Step StepPrefab;
     public GameObject Door;
     public CustomInputField SceneNameInputField;
+
+    public CustomInputField ScaleXInputField; // name "ScaleXInputField"
+    public CustomInputField ScaleYInputField; // name "ScaleYInputField"
+    public CustomInputField ScaleZInputField; // name "ScaleZInputField"
     
     private bool SetupComplete = false;
     private ObjectPool<SC_Step> stepPool;
     private List<SC_Step> activeSteps = new List<SC_Step>();
 
     private OVRManager ovrManager;
+
+    [ContextMenu("Open Persistent Data Path")]
+    public void OpenPersistentDataPath(){
+        string path = Application.persistentDataPath;
+        Debug.Log($"Opening Persistent Data Path: {path}");
+        
+        #if UNITY_EDITOR_OSX
+        System.Diagnostics.Process.Start("open", path);
+        #endif
+        
+        #if UNITY_EDITOR_WIN
+        System.Diagnostics.Process.Start("explorer.exe", path);
+        #endif
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -42,12 +61,21 @@ public class SC_Manager : NetworkBehaviour
             ClientSetup();
         }
     }
+    
+    // --- NEW --- Unsubscribe from the static event when the object is destroyed
+    private void OnDestroy()
+    {
+        if (IsServer)
+        {
+            SC_StepReference.OnScaleChanged -= OnReferenceStepScaleChanged;
+        }
+    }
 
     private void ServerSetup()
     {
         // Reset depth and rotation offsets to default values on server startup.
         // This prevents them from persisting across sessions in the editor.
-        CurrentSceneConfig.DepthOffset = 0f;
+        CurrentSceneConfig.DepthOffset = 1f;
         CurrentSceneConfig.RotationOffset = 0f;
 
         stepPool = new ObjectPool<SC_Step>(
@@ -64,13 +92,23 @@ public class SC_Manager : NetworkBehaviour
         DepthOffsetSlider = GameObject.Find("DepthOffset").GetComponent<SliderManager>();
         RotationOffsetSlider = GameObject.Find("RotationOffset").GetComponentInChildren<RadialSlider>();
         SceneNameInputField = GameObject.Find("ScenarioNameInput").GetComponent<CustomInputField>();
-        
+
+        // --- NEW --- Find and assign scale input fields
+        ScaleXInputField = GameObject.Find("ScaleXInputField").GetComponentInChildren<CustomInputField>();
+        ScaleYInputField = GameObject.Find("ScaleYInputField").GetComponentInChildren<CustomInputField>();
+        ScaleZInputField = GameObject.Find("ScaleZInputField").GetComponentInChildren<CustomInputField>();
+
         TotalDistanceSlider.mainSlider.onValueChanged.AddListener(OnTotalDistanceChanged);
         DistanceBetweenStepsSlider.mainSlider.onValueChanged.AddListener(OnDistanceBetweenStepsChanged);
         DoorScaleSlider.mainSlider.onValueChanged.AddListener(OnDoorScaleChanged);
         DepthOffsetSlider.mainSlider.onValueChanged.AddListener(OnDepthOffsetChanged);
         RotationOffsetSlider.onValueChanged.AddListener(OnRotationOffsetChanged);
         
+        // --- NEW --- Add listeners for when the user edits the scale input fields
+        ScaleXInputField.inputText.onEndEdit.AddListener(OnScaleXInput);
+        ScaleYInputField.inputText.onEndEdit.AddListener(OnScaleYInput);
+        ScaleZInputField.inputText.onEndEdit.AddListener(OnScaleZInput);
+
         // Find and assign all button references
         SceneConfigButtons[0] = GameObject.Find("Config").GetComponent<ButtonManager>();
         SceneConfigButtons[1] = GameObject.Find("Config (1)").GetComponent<ButtonManager>();
@@ -103,6 +141,9 @@ public class SC_Manager : NetworkBehaviour
             int index = i;
             SaveSceneConfigButtons[i].onClick.AddListener(() => OnSaveSceneConfigButton(index));
         }
+
+        // --- NEW --- Subscribe to scale changes from the ReferenceStep (e.g., from editor gizmos)
+        SC_StepReference.OnScaleChanged += OnReferenceStepScaleChanged;
 
         // Assign UI references
         ReferenceStep.transform.localScale = CurrentSceneConfig.StepScale;
@@ -269,6 +310,9 @@ public class SC_Manager : NetworkBehaviour
 
         if (ReferenceStep != null)
             ReferenceStep.transform.localScale = CurrentSceneConfig.StepScale;
+        
+        // --- NEW --- Update scale input fields when config is loaded
+        UpdateScaleInputFields();
             
         UpdateStepDoorParentTransform();
     }
@@ -354,6 +398,57 @@ public class SC_Manager : NetworkBehaviour
         // Save current config on application quit (optional)
         UpdateCurrentFromUI();
     }
+    
+    // --- NEW METHODS ---
+
+    // Called when the user finishes editing the X scale input field
+    private void OnScaleXInput(string input)
+    {
+        if (float.TryParse(input, out float newScaleX))
+        {
+            ReferenceStep.transform.localScale = new Vector3(newScaleX, ReferenceStep.transform.localScale.y, ReferenceStep.transform.localScale.z);
+        }
+    }
+
+    // Called when the user finishes editing the Y scale input field
+    private void OnScaleYInput(string input)
+    {
+        if (float.TryParse(input, out float newScaleY))
+        {
+            ReferenceStep.transform.localScale = new Vector3(ReferenceStep.transform.localScale.x, newScaleY, ReferenceStep.transform.localScale.z);
+        }
+    }
+
+    // Called when the user finishes editing the Z scale input field
+    private void OnScaleZInput(string input)
+    {
+        if (float.TryParse(input, out float newScaleZ))
+        {
+            ReferenceStep.transform.localScale = new Vector3(ReferenceStep.transform.localScale.x, ReferenceStep.transform.localScale.y, newScaleZ);
+        }
+    }
+    
+    // Called when the ReferenceStep's scale changes from any source (e.g., gizmos)
+    private void OnReferenceStepScaleChanged(Vector3 newScale)
+    {
+        UpdateScaleInputFields();
+        CurrentSceneConfig.StepScale = newScale; // Keep the config in sync
+    }
+
+    // Updates the text of the input fields to reflect the current scale
+    private void UpdateScaleInputFields()
+    {
+        if (ReferenceStep != null && ScaleXInputField != null && ScaleYInputField != null && ScaleZInputField != null)
+        {
+            Vector3 scale = ReferenceStep.transform.localScale;
+            // Use SetTextWithoutNotify to prevent triggering onEndEdit events, which would cause a loop
+            ScaleXInputField.inputText.SetTextWithoutNotify(scale.x.ToString("F2"));
+            ScaleYInputField.inputText.SetTextWithoutNotify(scale.y.ToString("F2"));
+            ScaleZInputField.inputText.SetTextWithoutNotify(scale.z.ToString("F2"));
+        }
+    }
+
+    // --- END NEW METHODS ---
 
     [ClientRpc]
     private void UpdateStepActiveStateClientRpc(ulong stepNetworkObjectId, bool isActive)
