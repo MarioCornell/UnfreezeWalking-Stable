@@ -151,12 +151,12 @@ public static class DataLogger
 
     private static string FormatVector3(Vector3 v)
     {
-        return $"({v.x:F4}-{v.y:F4}-{v.z:F4})";
+        return $"({v.x:F4}/{v.y:F4}/{v.z:F4})";
     }
 
     private static string FormatQuaternion(Quaternion q)
     {
-        return $"({q.x:F4}-{q.y:F4}-{q.z:F4}-{q.w:F4})";
+        return $"({q.x:F4}/{q.y:F4}/{q.z:F4}/{q.w:F4})";
     }
 
     private static void SaveToFile()
