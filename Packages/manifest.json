@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.boxqkrtm.ide.cursor": "https://github.com/boxqkrtm/com.unity.ide.cursor.git",
     "com.meta.xr.depthapi": "https://github.com/oculus-samples/Unity-DepthAPI.git?path=/Packages/com.meta.xr.depthapi",
     "com.meta.xr.depthapi.urp": "https://github.com/oculus-samples/Unity-DepthAPI.git?path=/Packages/com.meta.xr.depthapi.urp",
     "com.meta.xr.mrutilitykit": "71.0.0",

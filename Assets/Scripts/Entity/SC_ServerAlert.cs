@@ -17,12 +17,21 @@ public class SC_ServerAlert : MonoBehaviour
     {
         GameObject obj = other.gameObject;
         SC_Step step = obj.GetComponent<SC_Step>();
-        SC_StepReference reference= obj.GetComponent<SC_StepReference>();
+        SC_StepReference reference = obj.GetComponent<SC_StepReference>();
+
         if (step != null || reference != null)
         {
             Debug.Log("Server Alert: " + obj.name);
             audioSource.Play();
-            step.HighlightInternal();
+
+            if (step != null)
+            {
+                step.HighlightInternal();
+            }
+            if (reference != null)
+            {
+                reference.Highlight();
+            }
         }
     }
     
@@ -30,11 +39,20 @@ public class SC_ServerAlert : MonoBehaviour
     {
         GameObject obj = other.gameObject;
         SC_Step step = obj.GetComponent<SC_Step>();
-        SC_StepReference reference= obj.GetComponent<SC_StepReference>();
+        SC_StepReference reference = obj.GetComponent<SC_StepReference>();
+
         if (step != null || reference != null)
         {
             Debug.Log("Server Alert: " + obj.name);
-            step.UnhighlightInternal();
+
+            if (step != null)
+            {
+                step.UnhighlightInternal();
+            }
+            if (reference != null)
+            {
+                reference.Unhighlight();
+            }
         }
     }
 }

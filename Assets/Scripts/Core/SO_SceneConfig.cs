@@ -12,6 +12,7 @@ public class SO_SceneConfig : SSSoftware.SOPro.ScriptableObject
     
     // from -180 to 180
     public float RotationOffset = 0f;
+    public float DepthOffset = 0f;
     
     public Vector3 StepScale = new Vector3(2,0.3f,0.3f);
 }

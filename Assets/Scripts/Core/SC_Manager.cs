@@ -15,6 +15,7 @@ public class SC_Manager : NetworkBehaviour
     public SliderManager TotalDistanceSlider;
     public SliderManager DistanceBetweenStepsSlider;
     public SliderManager DoorScaleSlider;
+    public SliderManager DepthOffsetSlider;
     public RadialSlider RotationOffsetSlider;
     
     public Transform StepDoorParent;
@@ -44,6 +45,11 @@ public class SC_Manager : NetworkBehaviour
 
     private void ServerSetup()
     {
+        // Reset depth and rotation offsets to default values on server startup.
+        // This prevents them from persisting across sessions in the editor.
+        CurrentSceneConfig.DepthOffset = 0f;
+        CurrentSceneConfig.RotationOffset = 0f;
+
         stepPool = new ObjectPool<SC_Step>(
             CreateStep,
             OnGetStep,
@@ -55,12 +61,14 @@ public class SC_Manager : NetworkBehaviour
         TotalDistanceSlider = GameObject.Find("TrialDistance").GetComponent<SliderManager>();
         DistanceBetweenStepsSlider = GameObject.Find("StrideLength").GetComponent<SliderManager>();
         DoorScaleSlider = GameObject.Find("DoorScale").GetComponent<SliderManager>();
+        DepthOffsetSlider = GameObject.Find("DepthOffset").GetComponent<SliderManager>();
         RotationOffsetSlider = GameObject.Find("RotationOffset").GetComponentInChildren<RadialSlider>();
         SceneNameInputField = GameObject.Find("ScenarioNameInput").GetComponent<CustomInputField>();
         
         TotalDistanceSlider.mainSlider.onValueChanged.AddListener(OnTotalDistanceChanged);
         DistanceBetweenStepsSlider.mainSlider.onValueChanged.AddListener(OnDistanceBetweenStepsChanged);
         DoorScaleSlider.mainSlider.onValueChanged.AddListener(OnDoorScaleChanged);
+        DepthOffsetSlider.mainSlider.onValueChanged.AddListener(OnDepthOffsetChanged);
         RotationOffsetSlider.onValueChanged.AddListener(OnRotationOffsetChanged);
         
         // Find and assign all button references
@@ -196,18 +204,24 @@ public class SC_Manager : NetworkBehaviour
     
     private void OnLoadSceneConfigButton(int index)
     {  
+        // Store the current rotation and depth offsets to make them persistent across preset loads.
+        float persistentRotationOffset = CurrentSceneConfig.RotationOffset;
+        float persistentDepthOffset = CurrentSceneConfig.DepthOffset;
+
         // Load the scene config from the preset
         SceneNameInputField.inputText.text = SceneConfigPresets[index].PresetName;
         CurrentSceneConfig.TotalDistance = SceneConfigPresets[index].TotalDistance;
         CurrentSceneConfig.DistanceBetweenSteps = SceneConfigPresets[index].DistanceBetweenSteps;
         CurrentSceneConfig.StepScale = SceneConfigPresets[index].StepScale;
-        CurrentSceneConfig.RotationOffset = SceneConfigPresets[index].RotationOffset;
         CurrentSceneConfig.DoorScale = SceneConfigPresets[index].DoorScale;
+        
+        // Restore the persistent offsets
+        CurrentSceneConfig.RotationOffset = persistentRotationOffset;
+        CurrentSceneConfig.DepthOffset = persistentDepthOffset;
 
         // Update the UI and steps after loading
         UpdateUIFromConfig();
         UpdateSteps();
-        StepDoorParent.localEulerAngles = new Vector3(0, CurrentSceneConfig.RotationOffset, 0);
         
         if (Door != null)
         {
@@ -222,21 +236,20 @@ public class SC_Manager : NetworkBehaviour
         // Update CurrentSceneConfig from the UI before saving
         UpdateCurrentFromUI();
 
-        // Save the current config into the preset
+        // Save the current config into the preset, EXCLUDING rotation and depth offset.
         SceneConfigPresets[index].PresetName = SceneNameInputField.inputText.text;
         SceneConfigPresets[index].TotalDistance = CurrentSceneConfig.TotalDistance;
         SceneConfigPresets[index].DistanceBetweenSteps = CurrentSceneConfig.DistanceBetweenSteps;
         SceneConfigPresets[index].StepScale = CurrentSceneConfig.StepScale;
-        SceneConfigPresets[index].RotationOffset = CurrentSceneConfig.RotationOffset;
         SceneConfigPresets[index].DoorScale = CurrentSceneConfig.DoorScale;
 
         // Update the button text to reflect new config
         SceneConfigButtons[index].SetText(BuildStringFromConfig(index));
         
         // set dirty flag to save the changes
-        # if UNITY_EDITOR
+        #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(SceneConfigPresets[index]);
-        # endif
+        #endif
         
         Debug.Log($"Saved current config into Scene Config Preset {index}");
     }
@@ -249,13 +262,15 @@ public class SC_Manager : NetworkBehaviour
             DistanceBetweenStepsSlider.mainSlider.value = CurrentSceneConfig.DistanceBetweenSteps;
         if (DoorScaleSlider != null)
             DoorScaleSlider.mainSlider.value = CurrentSceneConfig.DoorScale;
+        if (DepthOffsetSlider != null)
+            DepthOffsetSlider.mainSlider.value = CurrentSceneConfig.DepthOffset;
         if (RotationOffsetSlider != null)
             RotationOffsetSlider.currentValue = CurrentSceneConfig.RotationOffset;
 
         if (ReferenceStep != null)
             ReferenceStep.transform.localScale = CurrentSceneConfig.StepScale;
-
-        StepDoorParent.localEulerAngles = new Vector3(0, CurrentSceneConfig.RotationOffset, 0);
+            
+        UpdateStepDoorParentTransform();
     }
 
     private void UpdateCurrentFromUI()
@@ -269,6 +284,9 @@ public class SC_Manager : NetworkBehaviour
         
         if (DoorScaleSlider != null)
             CurrentSceneConfig.DoorScale = DoorScaleSlider.mainSlider.value;
+            
+        if(DepthOffsetSlider != null)
+            CurrentSceneConfig.DepthOffset = DepthOffsetSlider.mainSlider.value;
 
         if (RotationOffsetSlider != null)
             CurrentSceneConfig.RotationOffset = RotationOffsetSlider.currentValue;
@@ -303,7 +321,32 @@ public class SC_Manager : NetworkBehaviour
     private void OnRotationOffsetChanged(float value)
     {
         CurrentSceneConfig.RotationOffset = value;
-        StepDoorParent.localEulerAngles = new Vector3(0, value, 0);
+        UpdateStepDoorParentTransform();
+    }
+    
+    private void OnDepthOffsetChanged(float value)
+    {
+        CurrentSceneConfig.DepthOffset = value;
+        UpdateStepDoorParentTransform();
+    }
+
+    private void UpdateStepDoorParentTransform()
+    {
+        // Calculate and apply the rotation from the offset
+        Quaternion newRotation = Quaternion.Euler(0, CurrentSceneConfig.RotationOffset, 0);
+        StepDoorParent.localRotation = newRotation;
+
+        // Calculate the direction vector based on the new rotation
+        Vector3 forwardDirection = newRotation * Vector3.forward;
+
+        // Calculate the new position by applying the depth offset along the local forward direction
+        Vector3 newPosition = forwardDirection * CurrentSceneConfig.DepthOffset;
+
+        // Preserve the original local Y position, as the offset should only affect the XZ plane
+        newPosition.y = StepDoorParent.localPosition.y;
+
+        // Apply the new, correctly calculated local position
+        StepDoorParent.localPosition = newPosition;
     }
 
     private void OnApplicationQuit()
@@ -315,10 +358,13 @@ public class SC_Manager : NetworkBehaviour
     [ClientRpc]
     private void UpdateStepActiveStateClientRpc(ulong stepNetworkObjectId, bool isActive)
     {
-        var step = NetworkManager.SpawnManager.SpawnedObjects[stepNetworkObjectId].GetComponent<SC_Step>();
-        if (step != null)
+        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(stepNetworkObjectId, out var networkObject))
         {
-            step.UpdateActiveState(isActive);
+            var step = networkObject.GetComponent<SC_Step>();
+            if (step != null)
+            {
+                step.UpdateActiveState(isActive);
+            }
         }
     }
     

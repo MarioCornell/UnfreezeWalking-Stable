@@ -1448,6 +1448,7 @@ MonoBehaviour:
   TotalDistanceSlider: {fileID: 0}
   DistanceBetweenStepsSlider: {fileID: 0}
   DoorScaleSlider: {fileID: 0}
+  DepthOffsetSlider: {fileID: 0}
   RotationOffsetSlider: {fileID: 0}
   StepDoorParent: {fileID: 1431329647}
   ReferenceStep: {fileID: 2105880939}
@@ -1595,6 +1596,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3311a1ab4bf664d3e8c538e1efb025c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NormalMaterial: {fileID: 2100000, guid: 1949a3159de004190ada7826fc33fd8e, type: 2}
+  HighlightMaterial: {fileID: 2100000, guid: c19598e1369244c0e944e95ac2f3a046, type: 2}
 --- !u!65 &2105880949
 BoxCollider:
   m_ObjectHideFlags: 0

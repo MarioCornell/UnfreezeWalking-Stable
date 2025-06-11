@@ -7,11 +7,16 @@ public class SC_StepReference : MonoBehaviour
 {
     public static UnityAction<Vector3> OnScaleChanged;
 
+    public Material NormalMaterial;
+    public Material HighlightMaterial;
+
     private Vector3 lastScale;
+    private Renderer objectRenderer;
 
     void Start()
     {
         lastScale = transform.localScale;
+        objectRenderer = GetComponent<Renderer>();
     }
 
     void Update()
@@ -20,6 +25,22 @@ public class SC_StepReference : MonoBehaviour
         {
             lastScale = transform.localScale;
             OnScaleChanged?.Invoke(lastScale);
+        }
+    }
+
+    public void Highlight()
+    {
+        if (objectRenderer != null && HighlightMaterial != null)
+        {
+            objectRenderer.material = HighlightMaterial;
+        }
+    }
+
+    public void Unhighlight()
+    {
+        if (objectRenderer != null && NormalMaterial != null)
+        {
+            objectRenderer.material = NormalMaterial;
         }
     }
 }
