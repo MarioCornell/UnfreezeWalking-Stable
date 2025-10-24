@@ -39,7 +39,7 @@ public class SC_EntitySyncingManager : NetworkBehaviour
     
     private void Update()
     {
-        if (!IsServer && AllClientTransformsNotNull())
+        if (!IsServer && AllClientTransformsNotNull() && NetworkManager.Singleton.IsConnectedClient)
         {
             MySyncData.HeadPosition = ClientHead.position;
             MySyncData.HeadRotation = ClientHead.rotation;
