@@ -104,51 +104,47 @@ public class SC_Manager : NetworkBehaviour
         DepthOffsetSlider.mainSlider.onValueChanged.AddListener(OnDepthOffsetChanged);
         RotationOffsetSlider.onValueChanged.AddListener(OnRotationOffsetChanged);
         
-        // --- NEW --- Add listeners for when the user edits the scale input fields
         ScaleXInputField.inputText.onEndEdit.AddListener(OnScaleXInput);
         ScaleYInputField.inputText.onEndEdit.AddListener(OnScaleYInput);
         ScaleZInputField.inputText.onEndEdit.AddListener(OnScaleZInput);
 
         // Find and assign all button references
-        SceneConfigButtons[0] = GameObject.Find("Config").GetComponent<ButtonManager>();
-        SceneConfigButtons[1] = GameObject.Find("Config (1)").GetComponent<ButtonManager>();
-        SceneConfigButtons[2] = GameObject.Find("Config (2)").GetComponent<ButtonManager>();
-        SceneConfigButtons[3] = GameObject.Find("Config (3)").GetComponent<ButtonManager>();
-        SceneConfigButtons[4] = GameObject.Find("Config (4)").GetComponent<ButtonManager>();
-
-        SaveSceneConfigButtons[0] = GameObject.Find("Save").GetComponent<ButtonManager>();
-        SaveSceneConfigButtons[1] = GameObject.Find("Save (1)").GetComponent<ButtonManager>();
-        SaveSceneConfigButtons[2] = GameObject.Find("Save (2)").GetComponent<ButtonManager>();
-        SaveSceneConfigButtons[3] = GameObject.Find("Save (3)").GetComponent<ButtonManager>();
-        SaveSceneConfigButtons[4] = GameObject.Find("Save (4)").GetComponent<ButtonManager>();
+        // SceneConfigButtons[0] = GameObject.Find("Config").GetComponent<ButtonManager>();
+        // SceneConfigButtons[1] = GameObject.Find("Config (1)").GetComponent<ButtonManager>();
+        // SceneConfigButtons[2] = GameObject.Find("Config (2)").GetComponent<ButtonManager>();
+        // SceneConfigButtons[3] = GameObject.Find("Config (3)").GetComponent<ButtonManager>();
+        // SceneConfigButtons[4] = GameObject.Find("Config (4)").GetComponent<ButtonManager>();
+        //
+        // SaveSceneConfigButtons[0] = GameObject.Find("Save").GetComponent<ButtonManager>();
+        // SaveSceneConfigButtons[1] = GameObject.Find("Save (1)").GetComponent<ButtonManager>();
+        // SaveSceneConfigButtons[2] = GameObject.Find("Save (2)").GetComponent<ButtonManager>();
+        // SaveSceneConfigButtons[3] = GameObject.Find("Save (3)").GetComponent<ButtonManager>();
+        // SaveSceneConfigButtons[4] = GameObject.Find("Save (4)").GetComponent<ButtonManager>();
 
         // Set button texts
-        for (int i = 0; i < SceneConfigButtons.Count; i++)
-        {
-            SceneConfigButtons[i].SetText(BuildStringFromConfig(i));
-        }
+        // for (int i = 0; i < SceneConfigButtons.Count; i++)
+        // {
+        //     SceneConfigButtons[i].SetText(BuildStringFromConfig(i));
+        // }
 
         // Assign button click events to load/save methods
-        for (int i = 0; i < SceneConfigButtons.Count; i++)
-        {
-            int index = i;
-            SceneConfigButtons[i].onClick.AddListener(() => OnLoadSceneConfigButton(index));
-        }
+        // for (int i = 0; i < SceneConfigButtons.Count; i++)
+        // {
+        //     int index = i;
+        //     SceneConfigButtons[i].onClick.AddListener(() => OnLoadSceneConfigButton(index));
+        // }
 
-        for (int i = 0; i < SaveSceneConfigButtons.Count; i++)
-        {
-            Debug.Log($"Setting save button {SceneConfigButtons[i].name}");
-            int index = i;
-            SaveSceneConfigButtons[i].onClick.AddListener(() => OnSaveSceneConfigButton(index));
-        }
+        // for (int i = 0; i < SaveSceneConfigButtons.Count; i++)
+        // {
+        //     Debug.Log($"Setting save button {SceneConfigButtons[i].name}");
+        //     int index = i;
+        //     SaveSceneConfigButtons[i].onClick.AddListener(() => OnSaveSceneConfigButton(index));
+        // }
 
-        // --- NEW --- Subscribe to scale changes from the ReferenceStep (e.g., from editor gizmos)
         SC_StepReference.OnScaleChanged += OnReferenceStepScaleChanged;
 
-        // Assign UI references
         ReferenceStep.transform.localScale = CurrentSceneConfig.StepScale;
         
-        // Set sliders from current config
         UpdateUIFromConfig();
         
         StartCoroutine(IEInitializeSteps());
