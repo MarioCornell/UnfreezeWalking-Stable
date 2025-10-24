@@ -6,7 +6,7 @@ public class SC_TeleportToFront : MonoBehaviour
 {
     [SerializeField] private Transform target;
     [SerializeField] private Transform destination;
-    [SerializeField] private float frontDistance = 1f;
+    [SerializeField] private float frontDistance = 0.7f;
     [SerializeField] private float upDistance = -0.5f;
     [SerializeField] private float rightDistance = 0.5f;
 

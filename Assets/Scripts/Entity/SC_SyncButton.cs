@@ -65,7 +65,9 @@ public class SC_SyncButton : NetworkBehaviour
         onPressed.Invoke();
         Debug.Log("Sync Button Pressed");
 
-        FindObjectOfType<SC_RecButton>().StartLogging();
+        FindObjectOfType<SC_RecButton>().ToggleLogging();
+
+        
     }
 
     private void Released()

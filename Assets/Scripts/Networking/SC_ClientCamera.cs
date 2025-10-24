@@ -15,13 +15,14 @@ public class SC_ClientCamera : MonoBehaviour
     // }
 
     public Transform ClientHead;
-    public Transform ClientHandL;
-    public Transform ClientHandR;
+    public Transform ClientControllerL;
+    public Transform ClientControllerR;
+    
 
     private void Start()
     {
         FindObjectOfType<SC_EntitySyncingManager>().ClientHead = ClientHead;
-        FindObjectOfType<SC_EntitySyncingManager>().ClientLeftHand = ClientHandL;
-        FindObjectOfType<SC_EntitySyncingManager>().ClientRightHand = ClientHandR;
+        FindObjectOfType<SC_EntitySyncingManager>().ClientLeftController = ClientControllerL;
+        FindObjectOfType<SC_EntitySyncingManager>().ClientRightController = ClientControllerR;
     }
 }

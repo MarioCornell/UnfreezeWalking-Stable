@@ -1,3 +1,4 @@
+using Meta.XR.MRUtilityKit;
 using Michsky.MUIP;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,6 +42,22 @@ public class SC_RecButton : MonoBehaviour
     void Update()
     {
         DataLogger.LogFrameData();
+    }
+
+    public void ToggleLogging()
+    {
+        if (DataLogger.IsLogging)
+        {
+            string sessionName = (_sessionNameInput != null) ? _sessionNameInput.inputText.text : null;
+            DataLogger.StartLogging(sessionName);
+            UpdateButtonVisuals();
+        }
+
+        else
+        {
+            DataLogger.StopLogging();
+            UpdateButtonVisuals();
+        }
     }
 
     public void StartLogging()

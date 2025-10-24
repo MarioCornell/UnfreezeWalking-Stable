@@ -2763,7 +2763,7 @@ GameObject:
   - component: {fileID: 4114002248481971460}
   - component: {fileID: 5557644279828737036}
   m_Layer: 0
-  m_Name: '[BuildingBlock] Hand Tracking right'
+  m_Name: Hand Tracking right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2797,7 +2797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 8b26b298-7bf4-490e-b245-a039c0184303
-  instanceId: 7067ee7f-9113-4daa-9d9a-7052e1861756
+  instanceId: 791d97a8-f362-4568-a930-24efe0ecb4fe
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -4040,7 +4040,7 @@ GameObject:
   - component: {fileID: 8254461767582509218}
   - component: {fileID: 7291647925573311142}
   m_Layer: 0
-  m_Name: '[BuildingBlock] Controller Tracking Left'
+  m_Name: Controller Tracking Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4084,7 +4084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 5817f7c0-f2a5-45f9-a5ca-64264e0166e8
-  instanceId: d79c472f-daa7-41bf-8d24-b57e7cba490b
+  instanceId: 15058370-9081-4679-af06-9a173ee7ea4c
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -5023,7 +5023,7 @@ GameObject:
   - component: {fileID: 6834023020222416871}
   - component: {fileID: 8635851991271539775}
   m_Layer: 0
-  m_Name: '[BuildingBlock] Hand Tracking left'
+  m_Name: Hand Tracking left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5057,7 +5057,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 8b26b298-7bf4-490e-b245-a039c0184303
-  instanceId: a1acb63e-51ac-4170-a453-73945624ac9b
+  instanceId: dc74bee1-6480-460d-8d5b-15582f2370a8
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -5872,7 +5872,7 @@ GameObject:
   - component: {fileID: 3396839793970247914}
   - component: {fileID: 519473172517951434}
   m_Layer: 0
-  m_Name: '[BuildingBlock] Controller Tracking Right'
+  m_Name: Controller Tracking Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5916,7 +5916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 5817f7c0-f2a5-45f9-a5ca-64264e0166e8
-  instanceId: 5fb99e17-683d-48b9-8049-5e4165a9770c
+  instanceId: 695ba6d0-f40c-441f-9707-5f4f96078a5e
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -10537,7 +10537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: e47682b9-c270-40b1-b16d-90b627a5ce1b
-  instanceId: 6f7339aa-e5d4-4409-b1fc-afcb0a814887
+  instanceId: c63f26be-ef65-414e-a309-7e8a8dd0dd92
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -10668,8 +10668,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClientHead: {fileID: 3565861652178563567}
-  ClientHandL: {fileID: 0}
-  ClientHandR: {fileID: 0}
+  ClientControllerL: {fileID: 4314523864579912779}
+  ClientControllerR: {fileID: 5479390836684357203}
 --- !u!1 &9160966284135072717
 GameObject:
   m_ObjectHideFlags: 0

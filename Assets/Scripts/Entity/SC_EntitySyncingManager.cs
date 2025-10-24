@@ -5,12 +5,12 @@ using UnityEngine;
 public class SC_EntitySyncingManager : NetworkBehaviour
 {
     [HideInInspector]public Transform ClientHead;
-    [HideInInspector]public Transform ClientLeftHand;
-    [HideInInspector]public Transform ClientRightHand;
+    [HideInInspector]public Transform ClientLeftController;
+    [HideInInspector]public Transform ClientRightController;
     
     public Transform HeadRepresentor;
-    public Transform LeftHandRepresentor;
-    public Transform RightHandRepresentor;
+    public Transform LeftControllerRepresentor;
+    public Transform RightControllerRepresentor;
     
     public SyncData MySyncData;
 
@@ -20,20 +20,20 @@ public class SC_EntitySyncingManager : NetworkBehaviour
         public Vector3 HeadPosition;
         public Quaternion HeadRotation;
         
-        public Vector3 LeftHandPosition;
-        public Quaternion LeftHandRotation;
+        public Vector3 LeftControllerPosition;
+        public Quaternion LeftControllerRotation;
         
-        public Vector3 RightHandPosition;
-        public Quaternion RightHandRotation;
+        public Vector3 RightControllerPosition;
+        public Quaternion RightControllerRotation;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref HeadPosition);
             serializer.SerializeValue(ref HeadRotation);
-            serializer.SerializeValue(ref LeftHandPosition);
-            serializer.SerializeValue(ref LeftHandRotation);
-            serializer.SerializeValue(ref RightHandPosition);
-            serializer.SerializeValue(ref RightHandRotation);
+            serializer.SerializeValue(ref LeftControllerPosition);
+            serializer.SerializeValue(ref LeftControllerRotation);
+            serializer.SerializeValue(ref RightControllerPosition);
+            serializer.SerializeValue(ref RightControllerRotation);
         }
     }
     
@@ -44,11 +44,11 @@ public class SC_EntitySyncingManager : NetworkBehaviour
             MySyncData.HeadPosition = ClientHead.position;
             MySyncData.HeadRotation = ClientHead.rotation;
             
-            MySyncData.LeftHandPosition = ClientLeftHand.position;
-            MySyncData.LeftHandRotation = ClientLeftHand.rotation;
+            MySyncData.LeftControllerPosition = ClientLeftController.position;
+            MySyncData.LeftControllerRotation = ClientLeftController.rotation;
             
-            MySyncData.RightHandPosition = ClientRightHand.position;
-            MySyncData.RightHandRotation = ClientRightHand.rotation;
+            MySyncData.RightControllerPosition = ClientRightController.position;
+            MySyncData.RightControllerRotation = ClientRightController.rotation;
             
             SyncEntitiesServerRPC(MySyncData);
             SyncRepresentation();
@@ -63,11 +63,11 @@ public class SC_EntitySyncingManager : NetworkBehaviour
         HeadRepresentor.position = syncData.HeadPosition;
         HeadRepresentor.rotation = syncData.HeadRotation;
         
-        LeftHandRepresentor.position = syncData.LeftHandPosition;
-        LeftHandRepresentor.rotation = syncData.LeftHandRotation;
+        LeftControllerRepresentor.position = syncData.LeftControllerPosition;
+        LeftControllerRepresentor.rotation = syncData.LeftControllerRotation;
         
-        RightHandRepresentor.position = syncData.RightHandPosition;
-        RightHandRepresentor.rotation = syncData.RightHandRotation;
+        RightControllerRepresentor.position = syncData.RightControllerPosition;
+        RightControllerRepresentor.rotation = syncData.RightControllerRotation;
     }
 
     private void SyncRepresentation()
@@ -75,16 +75,16 @@ public class SC_EntitySyncingManager : NetworkBehaviour
         HeadRepresentor.position = MySyncData.HeadPosition;
         HeadRepresentor.rotation = MySyncData.HeadRotation;
         
-        LeftHandRepresentor.position = MySyncData.LeftHandPosition;
-        LeftHandRepresentor.rotation = MySyncData.LeftHandRotation;
+        LeftControllerRepresentor.position = MySyncData.LeftControllerPosition;
+        LeftControllerRepresentor.rotation = MySyncData.LeftControllerRotation;
         
-        RightHandRepresentor.position = MySyncData.RightHandPosition;
-        RightHandRepresentor.rotation = MySyncData.RightHandRotation;
+        RightControllerRepresentor.position = MySyncData.RightControllerPosition;
+        RightControllerRepresentor.rotation = MySyncData.RightControllerRotation;
     }
 
     private bool AllClientTransformsNotNull()
     {
-        if (ClientHead == null || ClientLeftHand == null || ClientRightHand == null)
+        if (ClientHead == null || ClientLeftController == null || ClientRightController == null)
         {
             return false;
         }
