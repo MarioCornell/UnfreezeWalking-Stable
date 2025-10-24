@@ -13,6 +13,11 @@ public static class DataLogger
     private static float logTimer;
     private static float smoothedFps;
 
+    // --- NEW FIELD ---
+    // Tracks the session time of the next log entry
+    private static float currentLogSessionTime; 
+    // --- END NEW FIELD ---
+
     private static List<LogEntry> logEntries;
     private static Transform headTransform;
     private static Transform leftLegTransform;
@@ -95,10 +100,11 @@ public static class DataLogger
         logEntries.Clear();
         sessionName = string.IsNullOrEmpty(currentSessionName) ? "unnamed" : currentSessionName;
 
-        // --- New Tick-rate setup ---
+        // --- Tick-rate setup ---
         logInterval = 1.0f / LoggingTickRate;
         logTimer = 0f; 
-        // --- End New Tick-rate setup ---
+        currentLogSessionTime = 0f; // Reset session time tracker
+        // --- End Tick-rate setup ---
         
         Debug.Log($"Data logging started for session: {sessionName} at {LoggingTickRate} Hz.");
     }
@@ -116,11 +122,9 @@ public static class DataLogger
         SaveToFile();
     }
 
-    // Renamed from LogFrameData. This should be called from a MonoBehaviour's Update().
     public static void UpdateFrameData()
     {
         // --- FPS Calculation (runs every frame) ---
-        // We do this every frame, even when not logging, to keep the buffer warm.
         float currentFpsRaw = 1.0f / Time.unscaledDeltaTime;
         fpsBuffer[fpsBufferIndex++] = currentFpsRaw;
         if (fpsBufferIndex >= FPS_AVERAGE_FRAME_COUNT)
@@ -133,33 +137,39 @@ public static class DataLogger
         {
             total += fps;
         }
-        smoothedFps = total / FPS_AVERAGE_FRAME_COUNT; // Store smoothed FPS in static field
+        smoothedFps = total / FPS_AVERAGE_FRAME_COUNT; 
         // --- End FPS Calculation ---
 
         if (!IsLogging) return; // Don't run timer logic if not logging
 
         // --- Fixed Tick-Rate Logging Logic ---
-        logTimer += Time.unscaledDeltaTime; // Use unscaled delta time for timer
+        logTimer += Time.unscaledDeltaTime; 
 
-        // Use a while loop to "catch up" if frame time is longer than the interval
         while (logTimer >= logInterval)
         {
-            LogTickData(); // Call the new logging method
-            logTimer -= logInterval; // Decrement the timer by one interval
+            // --- MODIFICATION ---
+            // Calculate the correct timestamp for this *specific* tick
+            currentLogSessionTime += logInterval;
+            LogTickData(currentLogSessionTime); // Pass the calculated time to the logger
+            logTimer -= logInterval; 
+            // --- END MODIFICATION ---
         }
         // --- End Fixed Tick-Rate Logic ---
     }
 
-    // This new method contains the actual logging logic, called at a fixed tick rate
-    private static void LogTickData()
+    // --- MODIFICATION: Method signature changed ---
+    private static void LogTickData(float tickSessionTimestamp)
     {
         LogEntry entry = new LogEntry
         {
-            globalTime = Time.time,
+            // Use the calculated timestamps
+            globalTime = loggingStartTime + tickSessionTimestamp,
+            sessionTimestamp = tickSessionTimestamp,
+
+            // These values will be the same for all ticks within one frame, which is correct
             globalFrame = Time.frameCount,
-            sessionTimestamp = Time.time - loggingStartTime,
             sessionFrame = Time.frameCount - sessionStartFrame,
-            currentFPS = smoothedFps, // Use the pre-calculated smoothed FPS
+            currentFPS = smoothedFps, 
             headPosition = headTransform.position,
             headRotation = headTransform.rotation,
             leftLegPosition = leftLegTransform.position,
@@ -169,6 +179,7 @@ public static class DataLogger
             leftFootHit = leftFootCollider.IsHitting(),
             rightFootHit = rightFootCollider.IsHitting()
         };
+        // --- END MODIFICATION ---
 
         logEntries.Add(entry);
     }
@@ -200,7 +211,6 @@ public static class DataLogger
 
         StringBuilder sb = new StringBuilder();
 
-        // Updated header with all new columns in a logical order
         sb.AppendLine("GlobalTime,GlobalFrame,SessionTime,SessionFrame,FPS,Head_Position,Head_Rotation,LeftLeg_Position,LeftLeg_Rotation,RightLeg_Position,RightLeg_Rotation,LeftFoot_Hit,RightFoot_Hit");
 
         foreach (var entry in logEntries)
