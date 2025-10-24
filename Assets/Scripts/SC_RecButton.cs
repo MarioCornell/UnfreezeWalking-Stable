@@ -46,15 +46,16 @@ public class SC_RecButton : MonoBehaviour
 
     public void ToggleLogging()
     {
-        if (DataLogger.IsLogging)
+        if (!DataLogger.IsLogging)
         {
+            Debug.Log("not logging so start logging");
             string sessionName = (_sessionNameInput != null) ? _sessionNameInput.inputText.text : null;
             DataLogger.StartLogging(sessionName);
             UpdateButtonVisuals();
         }
-
         else
         {
+            Debug.Log("stop logging");
             DataLogger.StopLogging();
             UpdateButtonVisuals();
         }
@@ -80,6 +81,8 @@ public class SC_RecButton : MonoBehaviour
         if (DataLogger.IsLogging)
         {
             DataLogger.StopLogging();
+            UpdateButtonVisuals();
+
         }
     }
 
