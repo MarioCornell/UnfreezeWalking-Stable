@@ -17,6 +17,8 @@ public class SC_ClientCamera : MonoBehaviour
     public Transform ClientHead;
     public Transform ClientControllerL;
     public Transform ClientControllerR;
+    public Transform ClientHandL; 
+    public Transform ClientHandR; 
     
 
     private void Start()
@@ -24,5 +26,7 @@ public class SC_ClientCamera : MonoBehaviour
         FindObjectOfType<SC_EntitySyncingManager>().ClientHead = ClientHead;
         FindObjectOfType<SC_EntitySyncingManager>().ClientLeftController = ClientControllerL;
         FindObjectOfType<SC_EntitySyncingManager>().ClientRightController = ClientControllerR;
+        FindObjectOfType<SC_EntitySyncingManager>().ClientLeftHand = ClientHandL; 
+        FindObjectOfType<SC_EntitySyncingManager>().ClientRightHand = ClientHandR; 
     }
 }
