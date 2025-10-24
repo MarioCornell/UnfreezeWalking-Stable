@@ -246,6 +246,8 @@ MonoBehaviour:
   frontDistance: 1
   upDistance: -0.5
   rightDistance: 0.5
+  targetYPosition: 1
+  faceDestination: 1
 --- !u!1 &477221143
 GameObject:
   m_ObjectHideFlags: 0
@@ -885,7 +887,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1265294426}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!4 &1265294428
 Transform:
   m_ObjectHideFlags: 0

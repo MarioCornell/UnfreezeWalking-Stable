@@ -26,9 +26,9 @@ public class SC_Manager : NetworkBehaviour
     public GameObject Door;
     public CustomInputField SceneNameInputField;
 
-    public CustomInputField ScaleXInputField; // name "ScaleXInputField"
-    public CustomInputField ScaleYInputField; // name "ScaleYInputField"
-    public CustomInputField ScaleZInputField; // name "ScaleZInputField"
+    public CustomInputField ScaleXInputField; 
+    public CustomInputField ScaleYInputField; 
+    public CustomInputField ScaleZInputField; 
     
     private bool SetupComplete = false;
     private ObjectPool<SC_Step> stepPool;
@@ -62,7 +62,6 @@ public class SC_Manager : NetworkBehaviour
         }
     }
     
-    // --- NEW --- Unsubscribe from the static event when the object is destroyed
     private void OnDestroy()
     {
         if (IsServer)
@@ -70,11 +69,8 @@ public class SC_Manager : NetworkBehaviour
             SC_StepReference.OnScaleChanged -= OnReferenceStepScaleChanged;
         }
     }
-
     private void ServerSetup()
     {
-        // Reset depth and rotation offsets to default values on server startup.
-        // This prevents them from persisting across sessions in the editor.
         CurrentSceneConfig.DepthOffset = 1f;
         CurrentSceneConfig.RotationOffset = 0f;
 
@@ -93,7 +89,6 @@ public class SC_Manager : NetworkBehaviour
         RotationOffsetSlider = GameObject.Find("RotationOffset").GetComponentInChildren<RadialSlider>();
         SceneNameInputField = GameObject.Find("ScenarioNameInput").GetComponent<CustomInputField>();
 
-        // --- NEW --- Find and assign scale input fields
         ScaleXInputField = GameObject.Find("ScaleXInputField").GetComponentInChildren<CustomInputField>();
         ScaleYInputField = GameObject.Find("ScaleYInputField").GetComponentInChildren<CustomInputField>();
         ScaleZInputField = GameObject.Find("ScaleZInputField").GetComponentInChildren<CustomInputField>();
