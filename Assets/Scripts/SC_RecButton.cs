@@ -24,7 +24,7 @@ public class SC_RecButton : MonoBehaviour
         rightLegTransform = GameObject.Find("RightLeg").transform;
 
 
-        recButton = GetComponent<Button>();        
+        recButton = GetComponent<Button>();
 
         if (headTransform == null || leftLegTransform == null || rightLegTransform == null)
         {
@@ -43,6 +43,19 @@ public class SC_RecButton : MonoBehaviour
         DataLogger.LogFrameData();
     }
 
+    public void StartLogging()
+    {
+        if (DataLogger.IsLogging)
+        {
+            Debug.LogWarning("Logging already started");
+            return;
+        }
+
+        string sessionName = (_sessionNameInput != null) ? _sessionNameInput.inputText.text : null;
+        DataLogger.StartLogging(sessionName);
+        UpdateButtonVisuals();
+    }
+
     private void OnRecButtonPressed()
     {
         if (DataLogger.IsLogging)
@@ -51,8 +64,10 @@ public class SC_RecButton : MonoBehaviour
         }
         else
         {
-            string sessionName = (_sessionNameInput != null) ? _sessionNameInput.inputText.text : null;
-            DataLogger.StartLogging(sessionName);
+            // string sessionName = (_sessionNameInput != null) ? _sessionNameInput.inputText.text : null;
+            // DataLogger.StartLogging(sessionName);
+
+            FindObjectOfType<SC_TeleportToFront>().Teleport();
         }
         UpdateButtonVisuals();
     }

@@ -1,8 +1,24 @@
 using UnityEngine;
+using System.Collections;
 
 public class SC_FootCollider : MonoBehaviour
 {
+    public enum ControllerHand { Left, Right }
+    [SerializeField] private ControllerHand hand;
+
+    [Header("Haptics Settings")]
+    [SerializeField] private float vibrationFrequency = 0.5f;
+    [SerializeField] private float vibrationAmplitude = 1.0f;
+    [SerializeField] private float vibrationDuration = 0.15f;
+
     private int overlappingSteps = 0;
+    private OVRInput.Controller controllerMask;
+    private Coroutine activeVibrationCoroutine;
+
+    private void Start()
+    {
+        controllerMask = (hand == ControllerHand.Left) ? OVRInput.Controller.LTouch : OVRInput.Controller.RTouch;
+    }
 
     public bool IsHitting()
     {
@@ -11,10 +27,18 @@ public class SC_FootCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // We check for both SC_Step and SC_StepReference as per the project's structure
         if (other.GetComponent<SC_Step>() != null || other.GetComponent<SC_StepReference>() != null)
         {
             overlappingSteps++;
+
+            if (overlappingSteps == 1)
+            {
+                if (activeVibrationCoroutine != null)
+                {
+                    StopCoroutine(activeVibrationCoroutine);
+                }
+                activeVibrationCoroutine = StartCoroutine(VibratePulse());
+            }
         }
     }
 
@@ -22,11 +46,27 @@ public class SC_FootCollider : MonoBehaviour
     {
         if (other.GetComponent<SC_Step>() != null || other.GetComponent<SC_StepReference>() != null)
         {
-            // Ensure we don't go into negative counts, though this shouldn't happen in normal physics.
             if (overlappingSteps > 0)
             {
                 overlappingSteps--;
+                if (overlappingSteps == 0)
+                {
+                    if (activeVibrationCoroutine != null)
+                    {
+                        StopCoroutine(activeVibrationCoroutine);
+                        activeVibrationCoroutine = null;
+                    }
+                    OVRInput.SetControllerVibration(0, 0, controllerMask);
+                }
             }
         }
+    }
+
+    private IEnumerator VibratePulse()
+    {
+        OVRInput.SetControllerVibration(vibrationFrequency, vibrationAmplitude, controllerMask);
+        yield return new WaitForSeconds(vibrationDuration);
+        OVRInput.SetControllerVibration(0, 0, controllerMask);
+        activeVibrationCoroutine = null;
     }
 }
