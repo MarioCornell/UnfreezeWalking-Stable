@@ -12,11 +12,9 @@ public static class DataLogger
     private static float logInterval;
     private static float logTimer;
     private static float smoothedFps;
-
-    // --- NEW FIELD ---
+    
     // Tracks the session time of the next log entry
     private static float currentLogSessionTime; 
-    // --- END NEW FIELD ---
 
     private static List<LogEntry> logEntries;
     private static Transform headTransform;
@@ -33,6 +31,9 @@ public static class DataLogger
     private const int FPS_AVERAGE_FRAME_COUNT = 30;
     private static readonly float[] fpsBuffer = new float[FPS_AVERAGE_FRAME_COUNT];
     private static int fpsBufferIndex;
+    // --- NEW --- Tracks frames in buffer for accurate startup average
+    private static int fpsBufferCount;
+    // --- END NEW ---
 
     private struct LogEntry
     {
@@ -76,6 +77,7 @@ public static class DataLogger
         
         // Initialize FPS buffer
         fpsBufferIndex = 0;
+        fpsBufferCount = 0; // Reset buffer count
 
         Debug.Log("DataLogger Initialized.");
     }
@@ -132,13 +134,30 @@ public static class DataLogger
             fpsBufferIndex = 0;
         }
 
-        float total = 0f;
-        foreach (float fps in fpsBuffer)
+        // --- MODIFICATION ---
+        // Increment count until buffer is full
+        if (fpsBufferCount < FPS_AVERAGE_FRAME_COUNT)
         {
-            total += fps;
+            fpsBufferCount++;
         }
-        smoothedFps = total / FPS_AVERAGE_FRAME_COUNT; 
-        // --- End FPS Calculation ---
+        
+        float total = 0f;
+        // Only average over the frames we've actually added
+        for(int i = 0; i < fpsBufferCount; i++)
+        {
+            total += fpsBuffer[i];
+        }
+        
+        // Divide by the *actual* number of frames in the buffer
+        if (fpsBufferCount > 0)
+        {
+            smoothedFps = total / fpsBufferCount;
+        }
+        else
+        {
+            smoothedFps = 0f;
+        }
+        // --- END MODIFICATION ---
 
         if (!IsLogging) return; // Don't run timer logic if not logging
 
@@ -147,17 +166,13 @@ public static class DataLogger
 
         while (logTimer >= logInterval)
         {
-            // --- MODIFICATION ---
-            // Calculate the correct timestamp for this *specific* tick
             currentLogSessionTime += logInterval;
-            LogTickData(currentLogSessionTime); // Pass the calculated time to the logger
+            LogTickData(currentLogSessionTime); 
             logTimer -= logInterval; 
-            // --- END MODIFICATION ---
         }
         // --- End Fixed Tick-Rate Logic ---
     }
-
-    // --- MODIFICATION: Method signature changed ---
+    
     private static void LogTickData(float tickSessionTimestamp)
     {
         LogEntry entry = new LogEntry
@@ -166,7 +181,8 @@ public static class DataLogger
             globalTime = loggingStartTime + tickSessionTimestamp,
             sessionTimestamp = tickSessionTimestamp,
 
-            // These values will be the same for all ticks within one frame, which is correct
+            // These values are sampled from the *current frame*
+            // They will be identical for all ticks inside a single frame stall
             globalFrame = Time.frameCount,
             sessionFrame = Time.frameCount - sessionStartFrame,
             currentFPS = smoothedFps, 
@@ -179,7 +195,6 @@ public static class DataLogger
             leftFootHit = leftFootCollider.IsHitting(),
             rightFootHit = rightFootCollider.IsHitting()
         };
-        // --- END MODIFICATION ---
 
         logEntries.Add(entry);
     }
