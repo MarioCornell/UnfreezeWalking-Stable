@@ -7,13 +7,20 @@ public static class DataLogger
 {
     public static bool IsLogging { get; private set; }
 
+    // --- New Fields for Fixed Tick Logging ---
+    [Header("Logging tick rate in Hz (ticks per second)")]
+    public static float LoggingTickRate = 128.0f;
+    private static float logInterval;
+    private static float logTimer;
+    private static float smoothedFps; // Stores the most recent smoothed FPS
+    // --- End New Fields ---
+
     private static List<LogEntry> logEntries;
     private static Transform headTransform;
     private static Transform leftLegTransform;
     private static Transform rightLegTransform;
     private static string sessionName;
 
-    // --- New Fields ---
     private static float loggingStartTime;
     private static int sessionStartFrame;
     private static SC_FootCollider leftFootCollider;
@@ -23,7 +30,6 @@ public static class DataLogger
     private const int FPS_AVERAGE_FRAME_COUNT = 30;
     private static readonly float[] fpsBuffer = new float[FPS_AVERAGE_FRAME_COUNT];
     private static int fpsBufferIndex;
-    // --- End New Fields ---
 
     private struct LogEntry
     {
@@ -90,7 +96,13 @@ public static class DataLogger
         sessionStartFrame = Time.frameCount; // Record start frame for session
         logEntries.Clear();
         sessionName = string.IsNullOrEmpty(currentSessionName) ? "unnamed" : currentSessionName;
-        Debug.Log($"Data logging started for session: {sessionName}");
+
+        // --- New Tick-rate setup ---
+        logInterval = 1.0f / LoggingTickRate;
+        logTimer = 0f; 
+        // --- End New Tick-rate setup ---
+        
+        Debug.Log($"Data logging started for session: {sessionName} at {LoggingTickRate} Hz.");
     }
 
     public static void StopLogging()
@@ -106,36 +118,50 @@ public static class DataLogger
         SaveToFile();
     }
 
-    public static void LogFrameData()
+    // Renamed from LogFrameData. This should be called from a MonoBehaviour's Update().
+    public static void UpdateFrameData()
     {
-        // --- FPS Calculation ---
+        // --- FPS Calculation (runs every frame) ---
         // We do this every frame, even when not logging, to keep the buffer warm.
-        // Note: For this to work, something needs to call LogFrameData continuously. 
-        // Based on your SC_RecButton, this happens in Update(), which is perfect.
         float currentFpsRaw = 1.0f / Time.unscaledDeltaTime;
         fpsBuffer[fpsBufferIndex++] = currentFpsRaw;
         if (fpsBufferIndex >= FPS_AVERAGE_FRAME_COUNT)
         {
             fpsBufferIndex = 0;
         }
-        // --- End FPS Calculation ---
-
-        if (!IsLogging) return;
 
         float total = 0f;
         foreach (float fps in fpsBuffer)
         {
             total += fps;
         }
-        float smoothedFps = total / FPS_AVERAGE_FRAME_COUNT;
+        smoothedFps = total / FPS_AVERAGE_FRAME_COUNT; // Store smoothed FPS in static field
+        // --- End FPS Calculation ---
 
+        if (!IsLogging) return; // Don't run timer logic if not logging
+
+        // --- Fixed Tick-Rate Logging Logic ---
+        logTimer += Time.unscaledDeltaTime; // Use unscaled delta time for timer
+
+        // Use a while loop to "catch up" if frame time is longer than the interval
+        while (logTimer >= logInterval)
+        {
+            LogTickData(); // Call the new logging method
+            logTimer -= logInterval; // Decrement the timer by one interval
+        }
+        // --- End Fixed Tick-Rate Logic ---
+    }
+
+    // This new method contains the actual logging logic, called at a fixed tick rate
+    private static void LogTickData()
+    {
         LogEntry entry = new LogEntry
         {
             globalTime = Time.time,
             globalFrame = Time.frameCount,
             sessionTimestamp = Time.time - loggingStartTime,
             sessionFrame = Time.frameCount - sessionStartFrame,
-            currentFPS = smoothedFps,
+            currentFPS = smoothedFps, // Use the pre-calculated smoothed FPS
             headPosition = headTransform.position,
             headRotation = headTransform.rotation,
             leftLegPosition = leftLegTransform.position,
