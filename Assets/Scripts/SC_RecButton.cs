@@ -41,7 +41,7 @@ public class SC_RecButton : MonoBehaviour
 
     void Update()
     {
-        DataLogger.LogFrameData();
+        DataLogger.UpdateFrameData();
     }
 
     public void ToggleLogging()
@@ -60,6 +60,7 @@ public class SC_RecButton : MonoBehaviour
         }
     }
 
+    [ContextMenu("Start Logging")]
     public void StartLogging()
     {
         if (DataLogger.IsLogging)
@@ -71,6 +72,15 @@ public class SC_RecButton : MonoBehaviour
         string sessionName = (_sessionNameInput != null) ? _sessionNameInput.inputText.text : null;
         DataLogger.StartLogging(sessionName);
         UpdateButtonVisuals();
+    }
+
+    [ContextMenu("Stop Logging")]
+    public void StopLogging()
+    {
+        if (DataLogger.IsLogging)
+        {
+            DataLogger.StopLogging();
+        }
     }
 
     private void OnRecButtonPressed()

@@ -7,13 +7,11 @@ public static class DataLogger
 {
     public static bool IsLogging { get; private set; }
 
-    // --- New Fields for Fixed Tick Logging ---
     [Header("Logging tick rate in Hz (ticks per second)")]
     public static float LoggingTickRate = 128.0f;
     private static float logInterval;
     private static float logTimer;
-    private static float smoothedFps; // Stores the most recent smoothed FPS
-    // --- End New Fields ---
+    private static float smoothedFps;
 
     private static List<LogEntry> logEntries;
     private static Transform headTransform;
