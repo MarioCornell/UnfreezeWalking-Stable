@@ -11,7 +11,6 @@ public static class DataLogger
     public static float LoggingTickRate = 128.0f;
     private static float logInterval;
     private static float logTimer;
-    private static float smoothedFps;
     
     // Tracks the session time of the next log entry
     private static float currentLogSessionTime; 
@@ -23,25 +22,13 @@ public static class DataLogger
     private static string sessionName;
 
     private static float loggingStartTime;
-    private static int sessionStartFrame;
     private static SC_FootCollider leftFootCollider;
     private static SC_FootCollider rightFootCollider;
-    
-    // For FPS calculation
-    private const int FPS_AVERAGE_FRAME_COUNT = 30;
-    private static readonly float[] fpsBuffer = new float[FPS_AVERAGE_FRAME_COUNT];
-    private static int fpsBufferIndex;
-    // --- NEW --- Tracks frames in buffer for accurate startup average
-    private static int fpsBufferCount;
-    // --- END NEW ---
 
     private struct LogEntry
     {
         public float globalTime;
-        public int globalFrame;
         public float sessionTimestamp;
-        public int sessionFrame;
-        public float currentFPS;
         public Vector3 headPosition;
         public Quaternion headRotation;
         public Vector3 leftLegPosition;
@@ -74,10 +61,6 @@ public static class DataLogger
 
         logEntries = new List<LogEntry>();
         IsLogging = false;
-        
-        // Initialize FPS buffer
-        fpsBufferIndex = 0;
-        fpsBufferCount = 0; // Reset buffer count
 
         Debug.Log("DataLogger Initialized.");
     }
@@ -98,7 +81,6 @@ public static class DataLogger
 
         IsLogging = true;
         loggingStartTime = Time.time;
-        sessionStartFrame = Time.frameCount; // Record start frame for session
         logEntries.Clear();
         sessionName = string.IsNullOrEmpty(currentSessionName) ? "unnamed" : currentSessionName;
 
@@ -126,38 +108,7 @@ public static class DataLogger
 
     public static void UpdateFrameData()
     {
-        // --- FPS Calculation (runs every frame) ---
-        float currentFpsRaw = 1.0f / Time.unscaledDeltaTime;
-        fpsBuffer[fpsBufferIndex++] = currentFpsRaw;
-        if (fpsBufferIndex >= FPS_AVERAGE_FRAME_COUNT)
-        {
-            fpsBufferIndex = 0;
-        }
-
-        // --- MODIFICATION ---
-        // Increment count until buffer is full
-        if (fpsBufferCount < FPS_AVERAGE_FRAME_COUNT)
-        {
-            fpsBufferCount++;
-        }
-        
-        float total = 0f;
-        // Only average over the frames we've actually added
-        for(int i = 0; i < fpsBufferCount; i++)
-        {
-            total += fpsBuffer[i];
-        }
-        
-        // Divide by the *actual* number of frames in the buffer
-        if (fpsBufferCount > 0)
-        {
-            smoothedFps = total / fpsBufferCount;
-        }
-        else
-        {
-            smoothedFps = 0f;
-        }
-        // --- END MODIFICATION ---
+        // --- Removed FPS Calculation Block ---
 
         if (!IsLogging) return; // Don't run timer logic if not logging
 
@@ -181,11 +132,7 @@ public static class DataLogger
             globalTime = loggingStartTime + tickSessionTimestamp,
             sessionTimestamp = tickSessionTimestamp,
 
-            // These values are sampled from the *current frame*
-            // They will be identical for all ticks inside a single frame stall
-            globalFrame = Time.frameCount,
-            sessionFrame = Time.frameCount - sessionStartFrame,
-            currentFPS = smoothedFps, 
+            // Log transform and hit data
             headPosition = headTransform.position,
             headRotation = headTransform.rotation,
             leftLegPosition = leftLegTransform.position,
@@ -226,16 +173,15 @@ public static class DataLogger
 
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendLine("GlobalTime,GlobalFrame,SessionTime,SessionFrame,FPS,Head_Position,Head_Rotation,LeftLeg_Position,LeftLeg_Rotation,RightLeg_Position,RightLeg_Rotation,LeftFoot_Hit,RightFoot_Hit");
+        // Updated header
+        sb.AppendLine("GlobalTime,SessionTime,Head_Position,Head_Rotation,LeftLeg_Position,LeftLeg_Rotation,RightLeg_Position,RightLeg_Rotation,LeftFoot_Hit,RightFoot_Hit");
 
         foreach (var entry in logEntries)
         {
+            // Updated log entry
             sb.AppendLine(string.Join(",",
                 entry.globalTime.ToString("F3"),
-                entry.globalFrame,
                 entry.sessionTimestamp.ToString("F3"),
-                entry.sessionFrame,
-                entry.currentFPS.ToString("F1"),
                 FormatVector3(entry.headPosition),
                 FormatQuaternion(entry.headRotation),
                 FormatVector3(entry.leftLegPosition),
