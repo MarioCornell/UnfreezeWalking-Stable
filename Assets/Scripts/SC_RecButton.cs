@@ -94,10 +94,9 @@ public class SC_RecButton : MonoBehaviour
         }
         else
         {
-            // string sessionName = (_sessionNameInput != null) ? _sessionNameInput.inputText.text : null;
-            // DataLogger.StartLogging(sessionName);
-
-            FindObjectOfType<SC_TeleportToFront>().Teleport();
+            string sessionName = (_sessionNameInput != null) ? _sessionNameInput.inputText.text : null;
+            DataLogger.StartLogging(sessionName);
+            // FindObjectOfType<SC_TeleportToFront>().Teleport();
         }
         UpdateButtonVisuals();
     }
