@@ -31,7 +31,6 @@ public class SC_SyncButton : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Pressed();
-        
         // start the "buttonpress" animation, call it directly
     }
 

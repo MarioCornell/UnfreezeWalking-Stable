@@ -37,6 +37,7 @@ public static class DataLogger
         public Quaternion rightLegRotation;
         public bool leftFootHit;
         public bool rightFootHit;
+        public string EventData;
     }
 
     public static void Initialize(Transform head, Transform leftLeg, Transform rightLeg)

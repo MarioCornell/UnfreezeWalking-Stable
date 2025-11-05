@@ -46,6 +46,8 @@ public class SC_RecButton : MonoBehaviour
 
     public void ToggleLogging()
     {
+        
+        
         if (!DataLogger.IsLogging)
         {
             Debug.Log("not logging so start logging");

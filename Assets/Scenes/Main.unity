@@ -173,12 +173,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96c3d88ba024e547bbf419ef663725a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  threshold: 0.2
   debounceTime: 3
+  animator: {fileID: 0}
   onPressed:
-    m_PersistentCalls:
-      m_Calls: []
-  onReleased:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &439020010
@@ -997,7 +994,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -2011,7 +2008,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
