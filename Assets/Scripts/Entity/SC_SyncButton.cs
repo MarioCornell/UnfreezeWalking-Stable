@@ -40,7 +40,8 @@ public class SC_SyncButton : NetworkBehaviour
         onPressed.Invoke();
         Debug.Log("Sync Button Pressed");
 
-        FindObjectOfType<SC_RecButton>().ToggleLogging();
+
+        // should invoke the logger event here
     }
 
     private void Released()

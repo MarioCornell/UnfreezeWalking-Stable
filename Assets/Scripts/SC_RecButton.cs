@@ -103,6 +103,11 @@ public class SC_RecButton : MonoBehaviour
         UpdateButtonVisuals();
     }
 
+    public void TeleportToFront()
+    {
+        FindObjectOfType<SC_TeleportToFront>()?.Teleport();
+    }
+
     private void UpdateButtonVisuals()
     {
         if (DataLogger.IsLogging)
