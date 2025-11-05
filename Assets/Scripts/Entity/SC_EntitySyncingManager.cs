@@ -101,18 +101,23 @@ public class SC_EntitySyncingManager : NetworkBehaviour
     {
         HeadRepresentor.position = MySyncData.HeadPosition;
         HeadRepresentor.rotation = MySyncData.HeadRotation;
+        HeadRepresentor.GetComponentInChildren<MeshRenderer>().enabled = false;
         
         LeftControllerRepresentor.position = MySyncData.LeftControllerPosition;
         LeftControllerRepresentor.rotation = MySyncData.LeftControllerRotation;
+        LeftControllerRepresentor.GetComponentInChildren<MeshRenderer>().enabled = false;
         
         RightControllerRepresentor.position = MySyncData.RightControllerPosition;
         RightControllerRepresentor.rotation = MySyncData.RightControllerRotation;
+        RightControllerRepresentor.GetComponentInChildren<MeshRenderer>().enabled = false;
         
         LeftHandRepresentor.position = MySyncData.LeftHandPosition; 
         LeftHandRepresentor.rotation = MySyncData.LeftHandRotation; 
+        LeftControllerRepresentor.GetComponentInChildren<MeshRenderer>().enabled = false;
         
         RightHandRepresentor.position = MySyncData.RightHandPosition;
         RightHandRepresentor.rotation = MySyncData.RightHandRotation;
+        RightControllerRepresentor.GetComponentInChildren<MeshRenderer>().enabled = false;
     }
 
     private bool AllClientTransformsNotNull()

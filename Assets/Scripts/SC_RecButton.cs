@@ -35,7 +35,7 @@ public class SC_RecButton : MonoBehaviour
         }
 
         DataLogger.Initialize(headTransform, leftLegTransform, rightLegTransform);
-        recButton.onClick.AddListener(OnRecButtonPressed);
+        // recButton.onClick.AddListener(OnRecButtonPressed);
         UpdateButtonVisuals();
     }
 
@@ -124,7 +124,7 @@ public class SC_RecButton : MonoBehaviour
     {
         if (recButton != null)
         {
-            recButton.onClick.RemoveListener(OnRecButtonPressed);
+            // recButton.onClick.RemoveListener(OnRecButtonPressed);
         }
     }
 }

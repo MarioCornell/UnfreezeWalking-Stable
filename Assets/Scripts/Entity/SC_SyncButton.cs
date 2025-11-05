@@ -12,6 +12,8 @@ public class SC_SyncButton : NetworkBehaviour
     [SerializeField] private Animator animator;
 
     private bool _isPressed = false;
+    private bool canPress = true;
+    private SC_Manager sceneManager;
 
     public UnityEvent onPressed;
 
@@ -25,13 +27,24 @@ public class SC_SyncButton : NetworkBehaviour
 
     private void Start()
     {
-
+        sceneManager = FindObjectOfType<SC_Manager>();
+        
+        if (sceneManager == null)
+        {
+            Debug.LogWarning("SC_SyncButton: Could not find SC_Manager in scene. Event data logging will not include scene parameters.");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Pressed();
-        // start the "buttonpress" animation, call it directly
+        if (canPress)
+        {
+            Pressed();
+        }
+        else
+        {
+            Debug.Log("Sync Button press ignored - debounce active");
+        }
     }
 
     private void Pressed()
@@ -39,9 +52,39 @@ public class SC_SyncButton : NetworkBehaviour
         _isPressed = true;
         onPressed.Invoke();
         Debug.Log("Sync Button Pressed");
+        
+        if (animator != null)
+        {
+            animator.SetTrigger("Press");
+        }
+        
+        LogEventData();
+        
+        StartCoroutine(DebounceCoroutine());
+    }
 
+    private IEnumerator DebounceCoroutine()
+    {
+        canPress = false;
+        yield return new WaitForSeconds(debounceTime);
+        canPress = true;
+        Debug.Log("Sync Button ready for next press");
+    }
 
-        // should invoke the logger event here
+    private void LogEventData()
+    {
+        if (sceneManager == null || sceneManager.CurrentSceneConfig == null)
+        {
+            DataLogger.LogEvent("SyncButton_NoConfig");
+            return;
+        }
+        
+        SO_SceneConfig config = sceneManager.CurrentSceneConfig;
+        Vector3 stepScale = config.StepScale;
+        
+        string eventData = $"StepScale_X:{stepScale.x:F2}|Y:{stepScale.y:F2}|Z:{stepScale.z:F2}|TrialDistance:{config.TotalDistance:F2}|StrideLength:{config.DistanceBetweenSteps:F2}|DoorWidth:{config.DoorScale:F2}";
+        
+        DataLogger.LogEvent(eventData);
     }
 
     private void Released()

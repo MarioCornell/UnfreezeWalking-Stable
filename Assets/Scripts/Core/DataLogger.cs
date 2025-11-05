@@ -12,7 +12,6 @@ public static class DataLogger
     private static float logInterval;
     private static float logTimer;
     
-    // Tracks the session time of the next log entry
     private static float currentLogSessionTime; 
 
     private static List<LogEntry> logEntries;
@@ -24,6 +23,8 @@ public static class DataLogger
     private static float loggingStartTime;
     private static SC_FootCollider leftFootCollider;
     private static SC_FootCollider rightFootCollider;
+    
+    private static string pendingEventData = "";
 
     private struct LogEntry
     {
@@ -85,11 +86,10 @@ public static class DataLogger
         logEntries.Clear();
         sessionName = string.IsNullOrEmpty(currentSessionName) ? "unnamed" : currentSessionName;
 
-        // --- Tick-rate setup ---
         logInterval = 1.0f / LoggingTickRate;
         logTimer = 0f; 
-        currentLogSessionTime = 0f; // Reset session time tracker
-        // --- End Tick-rate setup ---
+        currentLogSessionTime = 0f;
+        pendingEventData = "";
         
         Debug.Log($"Data logging started for session: {sessionName} at {LoggingTickRate} Hz.");
     }
@@ -107,13 +107,22 @@ public static class DataLogger
         SaveToFile();
     }
 
+    public static void LogEvent(string eventData)
+    {
+        if (!IsLogging)
+        {
+            Debug.LogWarning("LogEvent called but logging is not active.");
+            return;
+        }
+        
+        pendingEventData = eventData;
+        Debug.Log($"Event logged: {eventData}");
+    }
+
     public static void UpdateFrameData()
     {
-        // --- Removed FPS Calculation Block ---
+        if (!IsLogging) return;
 
-        if (!IsLogging) return; // Don't run timer logic if not logging
-
-        // --- Fixed Tick-Rate Logging Logic ---
         logTimer += Time.unscaledDeltaTime; 
 
         while (logTimer >= logInterval)
@@ -122,18 +131,15 @@ public static class DataLogger
             LogTickData(currentLogSessionTime); 
             logTimer -= logInterval; 
         }
-        // --- End Fixed Tick-Rate Logic ---
     }
     
     private static void LogTickData(float tickSessionTimestamp)
     {
         LogEntry entry = new LogEntry
         {
-            // Use the calculated timestamps
             globalTime = loggingStartTime + tickSessionTimestamp,
             sessionTimestamp = tickSessionTimestamp,
 
-            // Log transform and hit data
             headPosition = headTransform.position,
             headRotation = headTransform.rotation,
             leftLegPosition = leftLegTransform.position,
@@ -141,20 +147,26 @@ public static class DataLogger
             rightLegPosition = rightLegTransform.position,
             rightLegRotation = rightLegTransform.rotation,
             leftFootHit = leftFootCollider.IsHitting(),
-            rightFootHit = rightFootCollider.IsHitting()
+            rightFootHit = rightFootCollider.IsHitting(),
+            EventData = pendingEventData
         };
 
         logEntries.Add(entry);
+        
+        if (!string.IsNullOrEmpty(pendingEventData))
+        {
+            pendingEventData = "";
+        }
     }
 
     private static string FormatVector3(Vector3 v)
     {
-        return $"({v.x:F4}/{v.y:F4}/{v.z:F4})";
+        return $"({v.x:F4}|{v.y:F4}|{v.z:F4})";
     }
 
     private static string FormatQuaternion(Quaternion q)
     {
-        return $"({q.x:F4}/{q.y:F4}/{q.z:F4}/{q.w:F4})";
+        return $"({q.x:F4}|{q.y:F4}|{q.z:F4}|{q.w:F4})";
     }
 
     private static void SaveToFile()
@@ -174,12 +186,10 @@ public static class DataLogger
 
         StringBuilder sb = new StringBuilder();
 
-        // Updated header
-        sb.AppendLine("GlobalTime,SessionTime,Head_Position,Head_Rotation,LeftLeg_Position,LeftLeg_Rotation,RightLeg_Position,RightLeg_Rotation,LeftFoot_Hit,RightFoot_Hit");
+        sb.AppendLine("GlobalTime,SessionTime,Head_Position,Head_Rotation,LeftLeg_Position,LeftLeg_Rotation,RightLeg_Position,RightLeg_Rotation,LeftFoot_Hit,RightFoot_Hit,EventData");
 
         foreach (var entry in logEntries)
         {
-            // Updated log entry
             sb.AppendLine(string.Join(",",
                 entry.globalTime.ToString("F3"),
                 entry.sessionTimestamp.ToString("F3"),
@@ -190,7 +200,8 @@ public static class DataLogger
                 FormatVector3(entry.rightLegPosition),
                 FormatQuaternion(entry.rightLegRotation),
                 entry.leftFootHit,
-                entry.rightFootHit
+                entry.rightFootHit,
+                $"\"{entry.EventData}\""
             ));
         }
 
