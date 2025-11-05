@@ -47,7 +47,8 @@ public class SC_SyncButton : NetworkBehaviour
         }
     }
 
-    private void Pressed()
+    [ContextMenu("Pressed")]
+    public void Pressed()
     {
         _isPressed = true;
         onPressed.Invoke();
@@ -73,16 +74,27 @@ public class SC_SyncButton : NetworkBehaviour
 
     private void LogEventData()
     {
+        string sceneName = "Unknown";
+        
+        if (sceneManager != null && sceneManager.SceneNameInputField != null)
+        {
+            sceneName = sceneManager.SceneNameInputField.inputText.text;
+            if (string.IsNullOrEmpty(sceneName))
+            {
+                sceneName = "Unnamed";
+            }
+        }
+        
         if (sceneManager == null || sceneManager.CurrentSceneConfig == null)
         {
-            DataLogger.LogEvent("SyncButton_NoConfig");
+            DataLogger.LogEvent($"SceneName:{sceneName}|SyncButton_NoConfig");
             return;
         }
         
         SO_SceneConfig config = sceneManager.CurrentSceneConfig;
         Vector3 stepScale = config.StepScale;
         
-        string eventData = $"StepScale_X:{stepScale.x:F2}|Y:{stepScale.y:F2}|Z:{stepScale.z:F2}|TrialDistance:{config.TotalDistance:F2}|StrideLength:{config.DistanceBetweenSteps:F2}|DoorWidth:{config.DoorScale:F2}";
+        string eventData = $"SceneName:{sceneName}|StepScale_X:{stepScale.x:F2}|Y:{stepScale.y:F2}|Z:{stepScale.z:F2}|TrialDistance:{config.TotalDistance:F2}|StrideLength:{config.DistanceBetweenSteps:F2}|DoorWidth:{config.DoorScale:F2}";
         
         DataLogger.LogEvent(eventData);
     }
